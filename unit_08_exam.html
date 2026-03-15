@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ඒකකය 8 — උෂ්ණත්වය</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Noto Sans Sinhala","Segoe UI",Arial,sans-serif;background:#0d1520;color:#e0e0e0;min-height:100vh}
+button{font-family:inherit;cursor:pointer}
+input,textarea,select{font-family:inherit}
+
+/* ── screens ── */
+.screen{display:none}
+.screen.active{display:block}
+
+/* ── cover ── */
+#cover{padding:28px 16px;max-width:620px;margin:0 auto}
+.inst-header{text-align:center;margin-bottom:28px}
+.inst-icon{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#880E4F,#880E4F88);display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 10px}
+.inst-name{font-size:20px;font-weight:700;color:#fff}
+.inst-sub{font-size:13px;color:#90caf9;margin-top:4px}
+.inst-craft{font-size:11px;color:#666;margin-top:2px}
+
+.unit-card{background:linear-gradient(135deg,#880E4F33,#880E4F11);border:1px solid #880E4F66;border-radius:18px;padding:26px 24px 20px;margin-bottom:20px}
+.unit-badges{display:flex;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+.badge-no{background:#880E4F;border-radius:10px;padding:7px 16px;font-size:14px;font-weight:800;color:#fff}
+.badge-code{font-size:12px;color:#777;background:rgba(255,255,255,0.06);padding:5px 12px;border-radius:6px;align-self:center}
+.unit-title{font-size:20px;font-weight:700;color:#fff;margin-bottom:4px}
+.unit-en{font-size:13px;color:#90a4ae;margin-bottom:16px}
+.unit-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px}
+.stat-box{background:rgba(0,0,0,0.3);border-radius:10px;padding:10px;text-align:center}
+.stat-lbl{font-size:11px;color:#777}
+.stat-val{font-size:12px;font-weight:600;color:#e0e0e0;margin-top:3px}
+.sec-pills{display:flex;gap:8px;flex-wrap:wrap}
+.sec-pill{border-radius:8px;padding:5px 12px;display:flex;gap:8px;align-items:center;font-size:12px}
+
+.st-box{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:20px 22px;margin-bottom:20px}
+.st-title{font-size:13px;font-weight:600;color:#90caf9;margin-bottom:14px}
+.field-lbl{font-size:12px;color:#888;display:block;margin-bottom:4px}
+.field-inp{width:100%;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:8px;padding:10px 14px;color:#fff;font-size:15px;outline:none;margin-bottom:10px}
+.field-inp:focus{border-color:#880E4F}
+
+.btn-start{width:100%;background:linear-gradient(135deg,#880E4F,#880E4Fcc);color:#fff;border:none;border-radius:12px;padding:14px;font-size:16px;font-weight:700}
+.btn-row{display:flex;gap:12px}
+.btn-sheet{background:rgba(255,255,255,0.07);color:#ccc;border:1px solid rgba(255,255,255,0.15);border-radius:12px;padding:14px 18px;font-size:16px}
+.subs-hint{text-align:center;margin-top:12px;font-size:12px;color:#666}
+.subs-hint a{color:#880E4F;cursor:pointer}
+
+/* ── exam ── */
+#exam{padding:16px;max-width:780px;margin:0 auto}
+.sticky-bar{position:sticky;top:0;z-index:50;background:#0d1520ee;backdrop-filter:blur(8px);border-radius:12px;padding:11px 18px;margin-bottom:18px;display:flex;justify-content:space-between;align-items:center;border:1px solid rgba(255,255,255,0.08)}
+.sticky-title{font-size:13px;font-weight:600;color:#fff}
+.sticky-sub{font-size:11px;color:#888;margin-top:1px}
+.sticky-right{display:flex;gap:10px;align-items:center}
+.progress-bar{background:rgba(255,255,255,0.06);border-radius:4px;height:4px;margin-bottom:22px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,#880E4F,#880E4F88);border-radius:4px;transition:width .3s}
+
+.sec-hdr{border-radius:12px 12px 0 0;padding:13px 20px;margin-top:26px}
+.sec-hdr-title{font-size:16px;font-weight:700;color:#fff}
+.sec-hdr-sub{font-size:12px;color:rgba(255,255,255,0.72);margin-top:2px}
+
+.q-box{padding:15px 18px;margin-bottom:2px;border-top:none}
+.q-row{display:flex;gap:10px;align-items:flex-start}
+.q-num{border-radius:7px;padding:4px 12px;font-size:13px;font-weight:700;color:#fff;white-space:nowrap;flex-shrink:0}
+.q-text{font-size:14px;color:#ddd;line-height:1.7;flex:1;white-space:pre-wrap}
+.q-marks{font-size:12px;font-weight:700;white-space:nowrap}
+.mcq-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}
+.mcq-btn{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:11px 12px;color:#ccc;font-size:14px;text-align:left;display:flex;gap:8px;align-items:flex-start;transition:all .15s}
+.mcq-btn.sel{background:#1565c0;border:2px solid #42a5f5;color:#fff}
+.mcq-btn.sel .mcq-ltr{color:#90caf9}
+.mcq-ltr{font-weight:800;color:#555;min-width:18px}
+.mcq-txt{line-height:1.5}
+.ta{width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:12px 14px;color:#e0e0e0;font-size:14px;resize:vertical;outline:none;margin-top:14px;line-height:1.7}
+.ta:focus{border-color:rgba(255,255,255,0.3)}
+
+.submit-box{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:24px;text-align:center;margin:8px 0 40px}
+.submit-status{font-size:13px;margin-bottom:16px}
+.btn-submit{background:linear-gradient(135deg,#880E4F,#880E4Faa);color:#fff;border:none;border-radius:12px;padding:14px 52px;font-size:16px;font-weight:700}
+
+/* ── ok ── */
+#ok{display:flex;align-items:center;justify-content:center;min-height:100vh}
+.ok-card{background:rgba(255,255,255,0.05);border:1px solid rgba(102,187,106,0.35);border-radius:20px;padding:48px 40px;text-align:center;max-width:420px}
+
+/* ── sheet ── */
+#sheet{padding:20px 16px;max-width:1300px;margin:0 auto}
+.sheet-hdr{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px;flex-wrap:wrap;gap:12px}
+.summary-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;margin-bottom:22px}
+.sum-card{background:rgba(255,255,255,0.04);border-radius:10px;padding:14px 10px;text-align:center}
+.sum-val{font-size:26px;font-weight:800}
+.sum-lbl{font-size:11px;color:#888;margin-top:3px}
+
+.tbl-hdr{background:rgba(255,255,255,0.07);border-radius:10px 10px 0 0;padding:9px 14px;display:grid;gap:4px;font-size:11px;color:#888;font-weight:700}
+.tbl-row{padding:9px 14px;display:grid;gap:4px;cursor:pointer;align-items:center;border-bottom:1px solid rgba(255,255,255,0.05)}
+.tbl-row:hover{background:rgba(255,255,255,0.04)}
+
+.mcq-badge{background:#1565c033;color:#90caf9;border-radius:3px;padding:1px 5px;font-weight:700;font-size:11px}
+.auto-mark{font-size:10px;font-weight:700}
+.auto-ok{color:#66bb6a}
+.auto-no{color:#ef5350}
+
+.exp-area{padding:14px 18px 22px;border-top:1px solid rgba(255,255,255,0.06);background:rgba(0,0,0,0.2);display:none}
+.exp-time{font-size:12px;color:#666;margin-bottom:14px}
+.mark-mode{background:#f57f1715;border:1px solid #f57f1744;border-radius:10px;padding:16px;margin-bottom:14px}
+.mark-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:10px;margin-bottom:14px}
+.mark-card{background:rgba(0,0,0,0.3);border-radius:8px;padding:10px 12px}
+.mark-card-hdr{font-size:11px;font-weight:700;margin-bottom:2px}
+.mark-card-q{font-size:11px;color:#888;margin-bottom:8px;line-height:1.4}
+.mark-inp-row{display:flex;align-items:center;gap:8px}
+.mark-inp{width:56px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:6px;padding:6px 8px;color:#fff;font-size:16px;font-weight:700;text-align:center;outline:none}
+.running-total{background:rgba(0,0,0,0.3);border-radius:8px;padding:12px 16px;margin-bottom:14px;display:flex;gap:24px;align-items:center;flex-wrap:wrap}
+
+.ans-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}
+.ans-card{background:rgba(0,0,0,0.35);border-radius:10px;padding:14px}
+.ans-card-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+.ans-card-q{font-size:12px;color:#777;margin-bottom:8px;line-height:1.5}
+.ans-text{font-size:13px;color:#ddd;background:rgba(255,255,255,0.05);border-radius:6px;padding:8px 12px;white-space:pre-wrap;line-height:1.6;min-height:28px}
+.mcq-edit-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.mcq-edit-btn{border-radius:6px;padding:7px 10px;font-size:12px;cursor:pointer;text-align:left}
+
+/* ── PRINT RESULT ── */
+#printview{display:none;background:#fff;color:#111;min-height:100vh;font-family:"Noto Sans Sinhala","Segoe UI",Arial,sans-serif}
+#printview.active{display:block}
+.print-topbar{background:#1a2744;padding:12px 24px;display:flex;gap:12px;align-items:center}
+.print-page{max-width:794px;margin:0 auto;padding:24px 32px 32px}
+.print-hdr{border-bottom:3px solid #880E4F;padding-bottom:16px;margin-bottom:20px;display:flex;justify-content:space-between;align-items:flex-start}
+.print-inst{font-size:18px;font-weight:800;color:#880E4F}
+.print-inst-sub{font-size:12px;color:#555;margin-top:2px}
+.print-inst-craft{font-size:11px;color:#888;margin-top:1px}
+.print-unit-banner{background:#880E4F18;border:1px solid #880E4F44;border-radius:8px;padding:10px 16px;margin-bottom:20px;text-align:center}
+.print-unit-name{font-size:17px;font-weight:700;color:#880E4F}
+.print-unit-en{font-size:12px;color:#666;margin-top:2px}
+.info-tbl{width:100%;border-collapse:collapse;margin-bottom:20px;font-size:13px}
+.info-tbl td{border:1px solid #ccc;padding:8px 12px}
+.info-tbl .lbl{background:#f5f5f5;font-weight:600;width:20%}
+.marks-tbl{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:20px}
+.marks-tbl th{background:#880E4F;color:#fff;padding:8px 10px;border:1px solid #880E4F88}
+.marks-tbl td{padding:7px 10px;border:1px solid #e0e0e0}
+.marks-tbl tr:nth-child(even) td{background:#fafafa}
+.sub-row td{font-weight:700}
+.result-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
+.result-box{border-radius:12px;padding:16px 20px;text-align:center}
+.result-lbl{font-size:12px;color:#888;margin-bottom:4px}
+.result-score{font-size:44px;font-weight:900;line-height:1}
+.result-of{font-size:14px;color:#666;margin-top:4px}
+.grade-pct{font-size:38px;font-weight:900;line-height:1}
+.grade-name{font-size:18px;font-weight:800;margin-top:4px}
+.grade-scale{background:#f9f9f9;border:1px solid #e0e0e0;border-radius:8px;padding:10px 16px;margin-bottom:20px;font-size:11px}
+.gs-title{font-weight:700;margin-bottom:6px;color:#555}
+.gs-row{display:flex;gap:20px;flex-wrap:wrap}
+.gs-item{display:flex;gap:6px;align-items:center}
+.gs-dot{width:12px;height:12px;border-radius:50%}
+.mcq-summary{margin-bottom:20px}
+.mcq-summary-title{font-size:13px;font-weight:700;color:#333;margin-bottom:8px;border-bottom:2px solid #e0e0e0;padding-bottom:4px}
+.mcq-chips{display:flex;gap:10px;flex-wrap:wrap}
+.mcq-chip{border:1px solid #880E4F55;border-radius:8px;padding:8px 14px;text-align:center;min-width:60px}
+.mcq-chip-lbl{font-size:11px;color:#888}
+.mcq-chip-ans{font-size:18px;font-weight:800;color:#880E4F}
+.mcq-chip-mark{font-size:11px;margin-top:2px}
+.mcq-chip-ok{color:#2e7d32}
+.mcq-chip-no{color:#c62828}
+.sigs{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;margin-top:32px}
+.sig{border-top:1px solid #333;padding-top:8px;text-align:center;font-size:11px;color:#666}
+.print-footer{margin-top:24px;text-align:center;font-size:10px;color:#bbb;border-top:1px solid #eee;padding-top:8px}
+
+/* buttons */
+.btn-ghost{background:rgba(255,255,255,0.07);color:#ccc;border:1px solid rgba(255,255,255,0.15);border-radius:8px;padding:8px 16px;font-size:13px}
+.btn-danger{background:rgba(183,28,28,0.2);color:#ef9a9a;border:1px solid rgba(183,28,28,0.4);border-radius:8px;padding:8px 16px;font-size:13px}
+.btn-mark{background:#f57f1722;color:#ffa726;border:1px solid #f57f1744;border-radius:4px;padding:3px 6px;font-size:10px}
+.btn-print{background:#1565c022;color:#90caf9;border:1px solid #1565c044;border-radius:4px;padding:3px 6px;font-size:10px}
+.btn-edit{background:#2e7d3222;color:#a5d6a7;border:1px solid #2e7d3244;border-radius:4px;padding:3px 6px;font-size:10px}
+.btn-del{background:#b71c1c22;color:#ef9a9a;border:1px solid #b71c1c44;border-radius:4px;padding:3px 6px;font-size:10px}
+.btn-save{background:#1b5e20;color:#fff;border:none;border-radius:8px;padding:10px 24px;font-size:14px;font-weight:700}
+.btn-pprint{background:#1565c0;color:#fff;border:none;border-radius:8px;padding:10px 20px;font-size:14px}
+.btn-cancel{background:rgba(255,255,255,0.08);color:#ccc;border:none;border-radius:8px;padding:10px 16px;font-size:13px}
+.btn-blue{background:#1565c0;color:#fff;border:none;border-radius:8px;padding:10px 24px;font-size:14px;font-weight:700}
+
+@media print {
+  body{background:#fff!important}
+  #printview{display:block!important}
+  .print-topbar,.no-print{display:none!important}
+  .print-page{padding:16px}
+  #cover,#exam,#ok,#sheet{display:none!important}
+}
+</style>
+</head>
+<body>
+
+<!-- ════════════════ COVER ════════════════ -->
+<div id="cover" class="screen active">
+  <div class="inst-header">
+    <div class="inst-icon">🏫</div>
+    <div class="inst-name">ශ්‍රී ලංකා තාක්ෂණ විද්‍යාලය</div>
+    <div class="inst-sub">Sri Lanka Technical College — Maradana</div>
+    <div class="inst-craft">ශිල්ප අදියර · Craft Level · Science 2026</div>
+  </div>
+  <div class="unit-card">
+    <div class="unit-badges">
+      <div class="badge-no">ඒකකය 8</div>
+      <div class="badge-code">021.07.01</div>
+    </div>
+    <div class="unit-title">උෂ්ණත්වය</div>
+    <div class="unit-en">Temperature</div>
+    <div class="unit-stats">
+      <div class="stat-box"><div class="stat-lbl">📅 දිනය</div><div class="stat-val">2026 ඔක්තෝබර් 16</div></div>
+      <div class="stat-box"><div class="stat-lbl">⏱ කාලය</div><div class="stat-val">1 පැය</div></div>
+      <div class="stat-box"><div class="stat-lbl">🎯 ලකුණු</div><div class="stat-val">100</div></div>
+    </div>
+    <div class="sec-pills">
+      <div class="sec-pill" style="background:#1565c033;border:1px solid #1565c055"><span style="font-weight:700;color:#1565c0">A</span><span style="color:#bbb">MCQ×4</span><span style="color:#1565c0;font-weight:700">20</span></div>
+      <div class="sec-pill" style="background:#2e7d3233;border:1px solid #2e7d3255"><span style="font-weight:700;color:#4caf50">B</span><span style="color:#bbb">කෙටි×3</span><span style="color:#4caf50;font-weight:700">30</span></div>
+      <div class="sec-pill" style="background:#7b1fa233;border:1px solid #7b1fa255"><span style="font-weight:700;color:#ba68c8">C</span><span style="color:#bbb">ව්‍යු×3</span><span style="color:#ba68c8;font-weight:700">50</span></div>
+    </div>
+  </div>
+  <div class="st-box">
+    <div class="st-title">ශිෂ්‍ය තොරතුරු</div>
+    <label class="field-lbl">ශිෂ්‍ය නම *</label>
+    <input id="stName" class="field-inp" placeholder="නම ලියන්න">
+    <label class="field-lbl">Index / ශිෂ්‍ය අංකය *</label>
+    <input id="stId" class="field-inp" placeholder="Index No.">
+    <label class="field-lbl">Batch</label>
+    <input id="stBatch" class="field-inp" placeholder="Batch (optional)">
+  </div>
+  <div class="btn-row">
+    <button class="btn-start" onclick="startExam()">▶  ප්‍රශ්නය ආරම්භ කරන්න</button>
+    <button class="btn-sheet" onclick="showSheet()">📋</button>
+  </div>
+  <div class="subs-hint" id="subsHint"></div>
+</div>
+
+<!-- ════════════════ EXAM ════════════════ -->
+<div id="exam" class="screen">
+  <div class="sticky-bar">
+    <div>
+      <div class="sticky-title">ඒකකය 8 — උෂ්ණත්වය</div>
+      <div class="sticky-sub" id="stInfo"></div>
+    </div>
+    <div class="sticky-right">
+      <div id="doneCount" style="font-size:12px;color:#ffa726">0/10</div>
+      <button class="btn-ghost" onclick="showScreen('cover')">← ආපසු</button>
+    </div>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="pFill" style="width:0%"></div></div>
+  <div id="examBody"></div>
+  <div class="submit-box">
+    <div class="submit-status" id="submitStatus">⚠️  සියලු ප්‍රශ්නවලට පිළිතුරු ලියන්න</div>
+    <button class="btn-submit" onclick="submitExam()">✅  ඉදිරිපත් කරන්න</button>
+  </div>
+</div>
+
+<!-- ════════════════ OK ════════════════ -->
+<div id="ok" class="screen">
+  <div class="ok-card">
+    <div style="font-size:72px;margin-bottom:16px">✅</div>
+    <h2 style="color:#a5d6a7;font-size:22px;margin-bottom:8px">ඉදිරිපත් කළා!</h2>
+    <p id="okName" style="color:#e0e0e0;font-weight:600;font-size:16px;margin:8px 0 4px"></p>
+    <p id="okId" style="color:#888;font-size:13px"></p>
+    <div style="display:flex;gap:12px;justify-content:center;margin-top:28px">
+      <button style="background:#880E4F;color:#fff;border:none;border-radius:10px;padding:12px 28px;font-size:14px;font-weight:600" onclick="resetCover()">🏠 Home</button>
+      <button style="background:rgba(255,255,255,0.1);color:#fff;border:1px solid rgba(255,255,255,0.2);border-radius:10px;padding:12px 24px;font-size:14px" onclick="showSheet()">📋 Sheet</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════ SHEET ════════════════ -->
+<div id="sheet" class="screen">
+  <div class="sheet-hdr">
+    <div>
+      <div style="font-size:11px;color:#555;margin-bottom:3px">ශ්‍රී ලංකා තාක්ෂණ විද්‍යාලය — මරදාන</div>
+      <h2 style="color:#fff;font-size:19px;margin-bottom:4px">📋 ලකුණු Sheet — ඒකකය 8</h2>
+      <div style="font-size:13px;color:#777">උෂ්ණත්වය · 2026 ඔක්තෝබර් 16</div>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn-ghost" onclick="showScreen('cover')">🏠 Home</button>
+      <button class="btn-danger" onclick="clearAll()">🗑 Clear</button>
+    </div>
+  </div>
+  <div class="summary-grid" id="summaryGrid"></div>
+  <div id="sheetBody"></div>
+</div>
+
+<!-- ════════════════ PRINT VIEW ════════════════ -->
+<div id="printview">
+  <div class="print-topbar no-print">
+    <button onclick="window.print()" style="background:#1565c0;color:#fff;border:none;border-radius:8px;padding:10px 24px;cursor:pointer;font-size:14px;font-weight:700;font-family:inherit">🖨️ Print / Save PDF</button>
+    <button onclick="hidePrint()" style="background:rgba(255,255,255,0.1);color:#fff;border:1px solid rgba(255,255,255,0.2);border-radius:8px;padding:10px 20px;cursor:pointer;font-size:14px;font-family:inherit">← ආපසු</button>
+    <span style="color:#90caf9;font-size:13px">Ctrl+P හෝ PDF ලෙස save කරන්න</span>
+  </div>
+  <div class="print-page" id="printPage"></div>
+</div>
+
+<script>
+const UNIT = {"no":8,"code":"021.07.01","color":"#880E4F","title":"උෂ්ණත්වය","titleEn":"Temperature","date":"2026 ඔක්තෝබර් 16","questions":[{"no":1,"type":"MCQ","marks":5,"text":"SI temperature ඒකක:","opts":["Celsius(°C)","Fahrenheit(°F)","Kelvin(K)","Rankine(R)"]},{"no":2,"type":"MCQ","marks":5,"text":"Celsius — lower fixed point:","opts":["Pure water freezing@std P","Seawater freezing","Ice@any P","273K exactly"]},{"no":3,"type":"MCQ","marks":5,"text":"37°C→K:","opts":["236K","310K","374K","300K"]},{"no":4,"type":"MCQ","marks":5,"text":"Absolute Zero(0K):","opts":["Water freezes","V=0;KE=0","Hg solidifies","All solid"]},{"no":5,"type":"Short","marks":10,"text":"(අ) Heat vs Temperature — වෙනස (ලකු 4)\n(ආ) Mercury thermometer — construction+working (ලකු 4)\n(ඇ) Hg>alcohol — advantages 2 (ලකු 2)"},{"no":6,"type":"Short","marks":10,"text":"(අ) Conversions: 100°C→K|0K→°C|373K→°C|-40°C→K|500K→°C (ලකු 5)\n(ආ) Absolute zero — නිර්ව+impossible ඇයි (ලකු 3)\n(ඇ) Celsius fixed points+K values (ලකු 2)"},{"no":7,"type":"Short","marks":10,"text":"(අ) Thermometer 4 types+advantage each (ලකු 4)\n(ආ) 38.5°C→K (ලකු 2)\n(ඇ) V=2L@27°C→V@127°C (Charles) (ලකු 4)"},{"no":8,"type":"Struct","marks":16,"text":"(i)V-T Graph — axes,line,intercept (ii)intercept@-273°C (iii)real gases\nV=3L@300K: (i)V@450K (ii)V@150K (iii)T@V=1.5L"},{"no":9,"type":"Struct","marks":17,"text":"Experiments: (i)Boiling point (ii)Melting point\nCalibration: 0°C→0.5, 100°C→99: (i)problem (ii)T_true@37.5 (iii)errors"},{"no":10,"type":"Struct","marks":17,"text":"0°C→200mL,100°C→273mL: (i)gradient (ii)V@200 (iii)T@V=0 (iv)%error\nC vs K: (i)zero point (ii)interval (iii)gas laws ඇයි K?"}]};
+const ANSWER_KEY = {"1":2,"2":0,"3":1,"4":1};
+const MAX_MARKS = 100;
+const LABELS = ['A','B','C','D'];
+const SK = 'sltc_u8_v5';
+
+// ── state ──────────────────────────────────────────────
+let subs = [];
+let answers = {};
+let student = {name:'',id:'',batch:''};
+let expandedId = null;
+let markingId = null;
+let markingData = {};
+let editId = null;
+let editAns = {};
+
+// ── storage ────────────────────────────────────────────
+async function loadSubs(){
+  try{const r=await window.storage.get(SK);if(r)subs=JSON.parse(r.value);}catch{}
+}
+async function saveSubs(){
+  try{await window.storage.set(SK,JSON.stringify(subs));}catch{}
+}
+
+// ── helpers ────────────────────────────────────────────
+function gradeInfo(pct){
+  if(pct>=80)return{g:'Distinction',c:'#b8860b',bg:'#fffde7',bc:'#ffd700'};
+  if(pct>=65)return{g:'Merit',c:'#555',bg:'#f1f8e9',bc:'#c0c0c0'};
+  if(pct>=50)return{g:'Pass',c:'#7f4a00',bg:'#fff8e1',bc:'#cd7f32'};
+  return{g:'Fail',c:'#b71c1c',bg:'#ffebee',bc:'#ef5350'};
+}
+function totalMarks(s){
+  return UNIT.questions.reduce((t,q)=>{
+    if(q.type==='MCQ'){
+      const correct=ANSWER_KEY[q.no];
+      const chosen=LABELS.indexOf(s.answers[q.no]||'');
+      return t+(chosen===correct?q.marks:0);
+    }
+    return t+(Number(s.examinerMarks?.[q.no])||0);
+  },0);
+}
+function mcqAutoMarks(s){
+  const res={};
+  UNIT.questions.filter(q=>q.type==='MCQ').forEach(q=>{
+    const correct=ANSWER_KEY[q.no];
+    const chosen=LABELS.indexOf(s.answers[q.no]||'');
+    res[q.no]={correct,chosen,ok:chosen===correct,marks:chosen===correct?q.marks:0};
+  });
+  return res;
+}
+function e(id){return document.getElementById(id);}
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  if(id==='printview'){
+    e('printview').style.display='block';
+    document.querySelectorAll('.screen').forEach(s=>{if(s.id!=='printview')s.style.display='none';});
+  } else {
+    e('printview').style.display='none';
+    document.querySelectorAll('.screen').forEach(s=>s.style.display='');
+    e(id).classList.add('active');
+  }
+}
+function updateProgress(){
+  const done=UNIT.questions.filter(q=>answers[q.no]?.toString().trim()).length;
+  e('pFill').style.width=(done*10)+'%';
+  e('doneCount').style.color=done===10?'#66bb6a':'#ffa726';
+  e('doneCount').textContent=done+'/10';
+  e('submitStatus').style.color=done<10?'#ffa726':'#66bb6a';
+  e('submitStatus').textContent=done<10?('⚠️  ප්‍රශ්න '+(10-done)+'ක් හිස්'):'✅  සියල්ල සම්පූර්ණ';
+}
+
+// ── build exam ─────────────────────────────────────────
+function buildExam(){
+  let html='';
+  const secInfo=[
+    {type:'MCQ',title:'A කොටස — බහු විකල්ප',sub:'ප්‍ර 01–04 · ලකුණු 5×4=20',c:'#1565c0'},
+    {type:'Short',title:'B කොටස — කෙටි පිළිතුරු',sub:'ප්‍ර 05–07 · ලකුණු 10×3=30',c:'#2e7d32'},
+    {type:'Struct',title:'C කොටස — ව්‍යුහගත ප්‍රශ්න',sub:'ප්‍ර 08–10 · ගිනීම් සියල්ල ලියන්න',c:'#7b1fa2'},
+  ];
+  secInfo.forEach(si=>{
+    const qs=UNIT.questions.filter(q=>q.type===si.type);
+    if(!qs.length)return;
+    html+='<div class="sec-hdr" style="background:linear-gradient(135deg,'+si.c+'cc,'+si.c+'77)"><div class="sec-hdr-title">'+si.title+'</div><div class="sec-hdr-sub">'+si.sub+'</div></div>';
+    qs.forEach(q=>{
+      const qc=si.c;
+      html+='<div class="q-box" style="background:'+qc+'12;border:1px solid '+qc+'33"><div class="q-row"><div class="q-num" style="background:'+qc+'">ප්‍ර '+q.no+'</div><div class="q-text">'+escHtml(q.text)+'</div><div class="q-marks" style="color:'+qc+'">'+q.marks+'ල.</div></div>';
+      if(q.type==='MCQ'){
+        html+='<div class="mcq-grid">';
+        q.opts.forEach((op,i)=>{
+          const ltr=LABELS[i];
+          html+='<button class="mcq-btn" id="mcq_'+q.no+'_'+ltr+'" onclick="selectMCQ('+q.no+',''+ltr+'')"><span class="mcq-ltr">'+ltr+'.</span><span class="mcq-txt">'+escHtml(op)+'</span></button>';
+        });
+        html+='</div>';
+      } else {
+        html+='<textarea class="ta" rows="'+(q.type==='Struct'?10:7)+'" placeholder="ඔබේ පිළිතුර ලියන්න…" onchange="answers['+q.no+']=this.value;updateProgress()" oninput="answers['+q.no+']=this.value;updateProgress()" id="ta_'+q.no+'"></textarea>';
+      }
+      html+='</div>';
+    });
+  });
+  e('examBody').innerHTML=html;
+  updateProgress();
+}
+function escHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function selectMCQ(no,ltr){
+  answers[no]=ltr;
+  LABELS.forEach(l=>{
+    const btn=e('mcq_'+no+'_'+l);
+    if(btn){btn.className='mcq-btn'+(l===ltr?' sel':'');}
+  });
+  updateProgress();
+}
+
+// ── start exam ─────────────────────────────────────────
+function startExam(){
+  student.name=e('stName').value.trim();
+  student.id=e('stId').value.trim();
+  student.batch=e('stBatch').value.trim();
+  if(!student.name){alert('ශිෂ්‍ය නම ලියන්න!');return;}
+  if(!student.id){alert('Index No. ලියන්න!');return;}
+  answers={};
+  e('stInfo').textContent=student.name+' · '+student.id;
+  buildExam();
+  showScreen('exam');
+}
+
+// ── submit ─────────────────────────────────────────────
+async function submitExam(){
+  const empty=UNIT.questions.filter(q=>!answers[q.no]?.toString().trim());
+  if(empty.length&&!confirm('ප්‍රශ්න '+empty.map(q=>q.no).join(',')+': හිස්. ඉදිරියට?'))return;
+  const sub={id:Date.now(),studentName:student.name,studentId:student.id,studentBatch:student.batch,
+    submittedAt:new Date().toLocaleString('si-LK'),answers:{...answers},examinerMarks:{}};
+  // Auto-mark MCQs
+  UNIT.questions.filter(q=>q.type==='MCQ').forEach(q=>{
+    const correct=ANSWER_KEY[q.no];
+    const chosen=LABELS.indexOf(answers[q.no]||'');
+    sub.examinerMarks[q.no]=(chosen===correct?q.marks:0);
+  });
+  subs.push(sub);
+  await saveSubs();
+  e('okName').textContent=student.name;
+  e('okId').textContent=student.id+' · ඒකකය '+UNIT.no;
+  showScreen('ok');
+}
+function resetCover(){
+  answers={};student={name:'',id:'',batch:''};
+  e('stName').value='';e('stId').value='';e('stBatch').value='';
+  updateSubsHint();
+  showScreen('cover');
+}
+
+// ── sheet ──────────────────────────────────────────────
+function showSheet(){
+  updateSubsHint();
+  renderSheet();
+  showScreen('sheet');
+}
+function renderSheet(){
+  const passCount=subs.filter(s=>{const t=totalMarks(s);return t>0&&t/MAX_MARKS>=0.5;}).length;
+  const markedCount=subs.filter(s=>Object.keys(s.examinerMarks||{}).filter(k=>UNIT.questions.find(q=>q.no==k&&q.type!=='MCQ')).length>0).length;
+  e('summaryGrid').innerHTML=
+    sumCard(subs.length,'ශිෂ්‍යයන්','#880E4F')+
+    sumCard(subs.filter(s=>Object.keys(s.answers).length===10).length,'සම්පූර්ණ','#1565c0')+
+    sumCard(markedCount,'Written ලකුණු','#ffa726')+
+    sumCard(passCount,'Pass+','#66bb6a');
+
+  if(!subs.length){
+    e('sheetBody').innerHTML='<div style="text-align:center;padding:80px 0;color:#555"><div style="font-size:52px;margin-bottom:16px">📭</div><div>Submissions නැත</div></div>';
+    return;
+  }
+
+  // Table grid: 28px name 90px id 70px batch mcq×4 written×6 total grade actions
+  const gc='28px 1fr 90px 68px 34px 34px 34px 34px 44px 44px 52px 52px 52px 56px 56px 78px';
+  let html='<div class="tbl-hdr" style="grid-template-columns:'+gc+'">';
+  html+='<span>#</span><span>නම</span><span>Index</span><span>Batch</span>';
+  [1,2,3,4].forEach(n=>html+='<span style="text-align:center;color:#90caf9">P'+n+'</span>');
+  [5,6,7].forEach(n=>html+='<span style="text-align:center;color:#a5d6a7">P'+n+'</span>');
+  [8,9,10].forEach(n=>html+='<span style="text-align:center;color:#ce93d8">P'+n+'</span>');
+  html+='<span style="text-align:center;color:#ffd700">Total</span>';
+  html+='<span style="text-align:center;color:#ffa726">Grade</span>';
+  html+='<span style="text-align:center">ක්‍රියා</span>';
+  html+='</div>';
+
+  subs.forEach((s,idx)=>{
+    const tot=totalMarks(s);
+    const pct=Math.round(tot/MAX_MARKS*100);
+    const gr=gradeInfo(pct);
+    const hasWrittenMarks=UNIT.questions.filter(q=>q.type!=='MCQ').some(q=>s.examinerMarks?.[q.no]!=null);
+    const bg=idx%2===0?'rgba(255,255,255,0.025)':'rgba(255,255,255,0.012)';
+    html+='<div id="row_'+s.id+'" style="background:'+bg+';border-bottom:1px solid rgba(255,255,255,0.05)">';
+    html+='<div class="tbl-row" style="grid-template-columns:'+gc+'" onclick="toggleRow('+s.id+')">';
+    html+='<span style="font-size:11px;color:#555">'+(idx+1)+'</span>';
+    html+='<span style="font-size:13px;color:#e0e0e0;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+escHtml(s.studentName)+'</span>';
+    html+='<span style="font-size:12px;color:#90caf9">'+escHtml(s.studentId)+'</span>';
+    html+='<span style="font-size:11px;color:#777;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+(s.studentBatch||'—')+'</span>';
+    [1,2,3,4].forEach(n=>{
+      const v=s.answers[n];const em=s.examinerMarks?.[n];const correct=ANSWER_KEY[n];const chosen=LABELS.indexOf(v||'');
+      html+='<span style="text-align:center">';
+      if(v){html+='<div><span class="mcq-badge">'+v+'</span></div>';}
+      if(em!=null){html+='<div class="auto-mark '+(chosen===correct?'auto-ok':'auto-no')+'">'+(chosen===correct?'✓':'✗')+em+'ල</div>';}
+      html+='</span>';
+    });
+    [5,6,7,8,9,10].forEach(n=>{
+      const v=s.answers[n];const em=s.examinerMarks?.[n];
+      html+='<span style="text-align:center">';
+      html+='<div style="font-size:14px">'+(v?.toString().trim()?'✓':'<span style="color:#444;font-size:10px">—</span>')+'</div>';
+      if(em!=null)html+='<div class="auto-mark" style="color:#ffa726">'+em+'ල</div>';
+      html+='</span>';
+    });
+    html+='<span style="text-align:center;font-weight:800;color:'+(hasWrittenMarks||tot>0?'#880E4F':'#555')+';font-size:14px">'+(tot>0?tot:'—')+'</span>';
+    html+='<span style="text-align:center">'+(tot>0?'<span style="font-weight:700;font-size:11px;color:'+gr.c+'">'+gr.g.slice(0,4)+'</span>':'<span style="color:#555;font-size:10px">—</span>')+'</span>';
+    html+='<div style="display:flex;gap:3px;justify-content:center;flex-wrap:wrap" onclick="event.stopPropagation()">';
+    html+='<button class="btn-mark" onclick="startMarking('+s.id+')">✏️ ල.</button>';
+    html+='<button class="btn-print" onclick="showPrint('+s.id+')">🖨️</button>';
+    html+='<button class="btn-edit" onclick="startEdit('+s.id+')">📝</button>';
+    html+='<button class="btn-del" onclick="delSub('+s.id+')">🗑</button>';
+    html+='</div>';
+    html+='</div>';
+    // Expanded area
+    html+='<div class="exp-area" id="exp_'+s.id+'"></div>';
+    html+='</div>';
+  });
+  e('sheetBody').innerHTML=html;
+}
+function sumCard(v,l,c){return '<div class="sum-card" style="border:1px solid '+c+'44"><div class="sum-val" style="color:'+c+'">'+v+'</div><div class="sum-lbl">'+l+'</div></div>';}
+
+// ── toggle expand ──────────────────────────────────────
+function toggleRow(id){
+  if(expandedId===id){
+    const el=e('exp_'+id);el.style.display='none';expandedId=null;
+    markingId=null;editId=null;
+  } else {
+    if(expandedId){const el=e('exp_'+expandedId);if(el)el.style.display='none';}
+    expandedId=id;renderExpand(id);
+    e('exp_'+id).style.display='block';
+  }
+}
+function renderExpand(id){
+  const s=subs.find(x=>x.id===id);if(!s)return;
+  const isMarking=markingId===id;
+  const isEditing=editId===id;
+  let html='<div class="exp-time">📅 '+s.submittedAt+(s.editedAt?' · ✏️ '+s.editedAt:'')+(s.markedAt?' · 🏆 '+s.markedAt:'')+'</div>';
+
+  if(isMarking){
+    html+='<div class="mark-mode">';
+    html+='<div style="font-size:14px;font-weight:700;color:#ffa726;margin-bottom:14px">✏️  Written ලකුණු ලේඛනය — '+escHtml(s.studentName)+'</div>';
+    html+='<div style="font-size:12px;color:#90caf9;margin-bottom:12px;background:#1565c022;border-radius:6px;padding:8px 12px">💡 MCQ ලකුණු ස්වයංක්‍රීයව ගිනීම් — Written (B+C) ලකුණු ඇතුළත් කරන්න</div>';
+    html+='<div class="mark-grid">';
+    UNIT.questions.filter(q=>q.type!=='MCQ').forEach(q=>{
+      const qc=q.type==='Short'?'#2e7d32':'#7b1fa2';
+      const cur=markingData[q.no]!=null?markingData[q.no]:'';
+      html+='<div class="mark-card" style="border:1px solid '+qc+'33">';
+      html+='<div class="mark-card-hdr" style="color:'+qc+'">ප්‍ර '+q.no+' ['+( q.type==='Short'?'B':'C')+'] — max '+q.marks+'</div>';
+      html+='<div class="mark-card-q">'+escHtml(q.text.split("\n")[0].slice(0,55))+'</div>';
+      html+='<div class="mark-inp-row">';
+      html+='<input type="number" min="0" max="'+q.marks+'" value="'+cur+'" class="mark-inp" id="mi_'+q.no+'" onchange="markingData['+q.no+']=Math.min('+q.marks+',Math.max(0,+this.value));refreshRunning('+id+')" oninput="markingData['+q.no+']=Math.min('+q.marks+',Math.max(0,+this.value));refreshRunning('+id+')">';
+      html+='<span style="font-size:12px;color:#888">/ '+q.marks+'</span>';
+      html+='<span id="mpct_'+q.no+'" style="font-size:11px;color:#888"></span>';
+      html+='</div></div>';
+    });
+    html+='</div>';
+    html+='<div class="running-total" id="runTotal_'+id+'">';
+    html+='<div><span style="font-size:12px;color:#888">Written: </span><span id="rtW" style="font-size:20px;font-weight:800;color:#ffa726">0</span></div>';
+    html+='<div><span style="font-size:12px;color:#888">MCQ Auto: </span><span id="rtM" style="font-size:20px;font-weight:800;color:#66bb6a">'+mcqTotal(s)+'</span></div>';
+    html+='<div><span style="font-size:12px;color:#888">Total: </span><span id="rtT" style="font-size:20px;font-weight:800;color:#880E4F">'+mcqTotal(s)+'</span><span style="font-size:13px;color:#888"> / '+MAX_MARKS+'</span></div>';
+    html+='<div id="rtG"></div>';
+    html+='</div>';
+    html+='<div style="display:flex;gap:12px;flex-wrap:wrap">';
+    html+='<button class="btn-save" onclick="saveMarking('+id+')">💾 සුරකින්න</button>';
+    html+='<button class="btn-pprint" onclick="saveAndPrint('+id+')">🖨️ Save+Print</button>';
+    html+='<button class="btn-cancel" onclick="markingId=null;renderExpand('+id+')">✗</button>';
+    html+='</div></div>';
+  }
+
+  if(isEditing){
+    html+='<div style="background:#2e7d3215;border:1px solid #2e7d3244;border-radius:8px;padding:10px 14px;margin-bottom:14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">';
+    html+='<span style="font-size:13px;color:#a5d6a7;font-weight:600">📝  පිළිතුරු සංශෝධනය…</span>';
+    html+='<button class="btn-save" onclick="saveEdit('+id+')">💾 සුරකින්න</button>';
+    html+='<button class="btn-cancel" onclick="editId=null;editAns={};renderExpand('+id+')">✗ අවලංගු</button>';
+    html+='</div>';
+  }
+
+  // MCQ auto result display
+  const mcqR=mcqAutoMarks(s);
+  html+='<div style="background:#1565c015;border:1px solid #1565c033;border-radius:8px;padding:12px 14px;margin-bottom:14px">';
+  html+='<div style="font-size:12px;font-weight:700;color:#90caf9;margin-bottom:10px">⚡ MCQ ස්වයංක්‍රීය ලකුණු</div>';
+  html+='<div style="display:flex;gap:10px;flex-wrap:wrap">';
+  [1,2,3,4].forEach(n=>{
+    const r=mcqR[n];const v=s.answers[n]||'—';
+    const correct=LABELS[ANSWER_KEY[n]];
+    html+='<div style="border:1px solid '+(r.ok?'#2e7d3255':'#b71c1c55')+';border-radius:8px;padding:8px 12px;text-align:center;background:'+(r.ok?'#1b5e2022':'#b71c1c22')+'">';
+    html+='<div style="font-size:11px;color:#888">ප්‍ර '+n+'</div>';
+    html+='<div style="font-size:18px;font-weight:800;color:'+(r.ok?'#66bb6a':'#ef5350')+'">'+v+'</div>';
+    html+='<div style="font-size:10px;color:'+(r.ok?'#66bb6a':'#ef5350')+'">'+(r.ok?'✓':'✗ '+correct)+'</div>';
+    html+='<div style="font-size:13px;font-weight:700;color:'+(r.ok?'#66bb6a':'#ef5350')+'">'+r.marks+'ල</div>';
+    html+='</div>';
+  });
+  html+='</div></div>';
+
+  html+='<div class="ans-grid">';
+  UNIT.questions.filter(q=>q.type!=='MCQ').forEach(q=>{
+    const cur=isEditing?(editAns[q.no]||''):(s.answers[q.no]||'');
+    const em=s.examinerMarks?.[q.no];
+    const qc=q.type==='Short'?'#2e7d32':'#7b1fa2';
+    html+='<div class="ans-card" style="border:1px solid '+qc+'33">';
+    html+='<div class="ans-card-hdr"><span style="font-size:12px;font-weight:700;color:'+qc+'">ප්‍ර '+q.no+' · '+q.type+' · '+q.marks+'ල.</span>';
+    if(em!=null)html+='<span style="font-size:13px;font-weight:800;color:#ffa726">'+em+'/'+q.marks+'</span>';
+    html+='</div>';
+    html+='<div class="ans-card-q">'+escHtml(q.text.split("\n")[0])+'</div>';
+    if(isEditing){
+      html+='<textarea class="ta" style="margin-top:0" rows="'+(q.type==='Struct'?7:4)+'" onchange="editAns['+q.no+']=this.value" oninput="editAns['+q.no+']=this.value">'+escHtml(cur)+'</textarea>';
+    } else {
+      html+='<div class="ans-text">'+(cur||'<span style="color:#555">— හිස් —</span>')+'</div>';
+    }
+    html+='</div>';
+  });
+  html+='</div>';
+  e('exp_'+id).innerHTML=html;
+}
+
+function mcqTotal(s){
+  let t=0;
+  UNIT.questions.filter(q=>q.type==='MCQ').forEach(q=>{
+    const correct=ANSWER_KEY[q.no];const chosen=LABELS.indexOf(s.answers[q.no]||'');
+    if(chosen===correct)t+=q.marks;
+  });
+  return t;
+}
+function refreshRunning(id){
+  const wt=UNIT.questions.filter(q=>q.type!=='MCQ').reduce((t,q)=>t+(Number(markingData[q.no])||0),0);
+  const mt=mcqTotal(subs.find(x=>x.id===id));
+  const tot=wt+mt;
+  const pct=Math.round(tot/MAX_MARKS*100);
+  const gr=gradeInfo(pct);
+  const rW=e('rtW');const rT=e('rtT');const rG=e('rtG');
+  if(rW)rW.textContent=wt;if(rT)rT.textContent=tot;
+  if(rG)rG.innerHTML='<span style="font-size:15px;font-weight:800;color:'+gr.c+'">'+gr.g+' ('+pct+'%)</span>';
+  UNIT.questions.filter(q=>q.type!=='MCQ').forEach(q=>{
+    const v=Number(markingData[q.no]);const el=e('mpct_'+q.no);
+    if(el&&!isNaN(v))el.textContent=Math.round(v/q.marks*100)+'%';
+  });
+}
+
+// ── marking ────────────────────────────────────────────
+function startMarking(id){markingId=id;markingData={};editId=null;editAns={};if(expandedId!==id)toggleRow(id);else renderExpand(id);}
+async function saveMarking(id){
+  const idx=subs.findIndex(s=>s.id===id);if(idx<0)return;
+  UNIT.questions.filter(q=>q.type!=='MCQ').forEach(q=>{
+    if(markingData[q.no]!=null)subs[idx].examinerMarks[q.no]=markingData[q.no];
+  });
+  subs[idx].markedAt=new Date().toLocaleString('si-LK');
+  await saveSubs();markingId=null;markingData={};renderSheet();
+  expandedId=id;e('exp_'+id).style.display='block';renderExpand(id);
+}
+async function saveAndPrint(id){await saveMarking(id);showPrint(id);}
+
+// ── edit ───────────────────────────────────────────────
+function startEdit(id){editId=id;editAns={...subs.find(s=>s.id===id).answers};markingId=null;if(expandedId!==id)toggleRow(id);else renderExpand(id);}
+async function saveEdit(id){
+  const idx=subs.findIndex(s=>s.id===id);if(idx<0)return;
+  subs[idx].answers={...editAns};
+  subs[idx].editedAt=new Date().toLocaleString('si-LK');
+  // Re-auto-mark MCQs
+  UNIT.questions.filter(q=>q.type==='MCQ').forEach(q=>{
+    const correct=ANSWER_KEY[q.no];const chosen=LABELS.indexOf(editAns[q.no]||'');
+    subs[idx].examinerMarks[q.no]=chosen===correct?q.marks:0;
+  });
+  await saveSubs();editId=null;editAns={};renderSheet();
+  expandedId=id;e('exp_'+id).style.display='block';renderExpand(id);
+}
+async function delSub(id){
+  if(!confirm('මෙම submission මකන්නද?'))return;
+  subs=subs.filter(s=>s.id!==id);await saveSubs();
+  if(expandedId===id)expandedId=null;renderSheet();
+}
+async function clearAll(){
+  if(!confirm('සියලු data මකන්නද?'))return;
+  subs=[];await saveSubs();renderSheet();
+}
+
+// ── print ──────────────────────────────────────────────
+function showPrint(id){
+  const s=subs.find(x=>x.id===id);if(!s)return;
+  const tot=totalMarks(s);const pct=Math.round(tot/MAX_MARKS*100);const gr=gradeInfo(pct);
+  const mcqR=mcqAutoMarks(s);
+
+  let html='<div class="print-hdr"><div><div class="print-inst">ශ්‍රී ලංකා තාක්ෂණ විද්‍යාලය — මරදාන</div><div class="print-inst-sub">Sri Lanka Technical College — Maradana</div><div class="print-inst-craft">ශිල්ප අදියර · Craft Level · Science 2026</div></div><div style="text-align:right"><div style="font-size:11px;color:#888">ඒකකය / Unit</div><div style="font-size:24px;font-weight:900;color:#880E4F">8</div><div style="font-size:11px;color:#888">021.07.01</div></div></div>';
+  html+='<div class="print-unit-banner"><div class="print-unit-name">උෂ්ණත්වය</div><div class="print-unit-en">Temperature · 2026 ඔක්තෝබර් 16</div></div>';
+
+  html+='<table class="info-tbl"><tbody>';
+  html+='<tr><td class="lbl">ශිෂ්‍ය නම</td><td style="font-weight:500">'+escHtml(s.studentName)+'</td><td class="lbl">Index / අංකය</td><td style="font-weight:500">'+escHtml(s.studentId)+'</td></tr>';
+  html+='<tr><td class="lbl">Batch</td><td>'+(s.studentBatch||'—')+'</td><td class="lbl">දිනය</td><td>2026 ඔක්තෝබර් 16</td></tr>';
+  html+='</tbody></table>';
+
+  html+='<table class="marks-tbl"><thead><tr><th>ප්‍ර #</th><th>කොටස</th><th>ප්‍රශ්නය</th><th>ස්වයං</th><th>උපරිම</th><th>ලැබූ</th></tr></thead><tbody>';
+  UNIT.questions.forEach((q,i)=>{
+    const sec=q.type==='MCQ'?'A':q.type==='Short'?'B':'C';
+    const scBg=sec==='A'?'#e3f2fd':sec==='B'?'#e8f5e9':'#f3e5f5';
+    const em=s.examinerMarks?.[q.no];
+    const isMCQ=q.type==='MCQ';
+    const autoStr=isMCQ?(mcqR[q.no].ok?'✓ '+LABELS[ANSWER_KEY[q.no]]:'✗ '+s.answers[q.no]+'→'+LABELS[ANSWER_KEY[q.no]]):'—';
+    html+='<tr><td style="text-align:center;font-weight:700;color:#880E4F">'+(i+1)+'</td>';
+    html+='<td style="text-align:center"><span style="background:'+scBg+';border-radius:4px;padding:2px 8px;font-size:11px;font-weight:600">'+sec+'</span></td>';
+    html+='<td style="font-size:11px;color:#555;line-height:1.4">'+escHtml(q.text.split("\n")[0].slice(0,75))+'</td>';
+    html+='<td style="text-align:center;font-size:11px;color:'+(isMCQ?(mcqR[q.no].ok?'#2e7d32':'#c62828'):'#888')+'">'+autoStr+'</td>';
+    html+='<td style="text-align:center;font-weight:600">'+q.marks+'</td>';
+    html+='<td style="text-align:center;font-weight:700;font-size:14px;color:'+(em!=null&&em>0?'#2e7d32':em===0?'#c62828':'#999')+'">'+(em!=null?em:'—')+'</td></tr>';
+  });
+  [['A',[1,2,3,4],20,'#e3f2fd','#1565c0'],['B',[5,6,7],30,'#e8f5e9','#2e7d32'],['C',[8,9,10],50,'#f3e5f5','#7b1fa2']].forEach(([sec,nos,max,bg,cc])=>{
+    const earned=nos.reduce((t,n)=>t+(Number(s.examinerMarks?.[n])||0),0);
+    html+='<tr class="sub-row" style="background:'+bg+'"><td colspan="4" style="font-weight:700;color:'+cc+';font-size:12px">'+(sec==='A'?'A කොටස — MCQ (ස්වයංක්‍රීය)':sec==='B'?'B කොටස — කෙටි':'C කොටස — ව්‍යුහගත')+' — උප එකතුව</td><td style="text-align:center;font-weight:700">'+max+'</td><td style="text-align:center;font-weight:800;color:'+cc+';font-size:14px">'+earned+'</td></tr>';
+  });
+  html+='</tbody></table>';
+
+  html+='<div class="result-grid">';
+  html+='<div class="result-box" style="border:2px solid #880E4F"><div class="result-lbl">මුළු ලකුණු / Total Marks</div><div class="result-score" style="color:#880E4F">'+tot+'</div><div class="result-of">/ '+MAX_MARKS+'</div></div>';
+  html+='<div class="result-box" style="border:2px solid '+gr.bc+';background:'+gr.bg+'"><div class="result-lbl">ශ්‍රේණිය / Grade</div><div class="grade-pct" style="color:'+gr.c+'">'+pct+'%</div><div class="grade-name" style="color:'+gr.c+'">'+gr.g+'</div></div>';
+  html+='</div>';
+
+  html+='<div class="grade-scale"><div class="gs-title">ශ්‍රේණිදායක පරිමාණය / Grading Scale</div><div class="gs-row">';
+  [['Distinction','80–100%','#b8860b'],['Merit','65–79%','#555'],['Pass','50–64%','#7f4a00'],['Fail','< 50%','#b71c1c']].forEach(([g,r,c])=>{
+    html+='<div class="gs-item"><div class="gs-dot" style="background:'+c+'"></div><span style="font-weight:700;color:'+c+'">'+g+'</span><span style="color:#888">'+r+'</span></div>';
+  });
+  html+='</div></div>';
+
+  html+='<div class="mcq-summary"><div class="mcq-summary-title">MCQ ස්වයංක්‍රීය ලකුණු</div><div class="mcq-chips">';
+  [1,2,3,4].forEach(n=>{
+    const r=mcqR[n];const v=s.answers[n]||'—';const correct=LABELS[ANSWER_KEY[n]];
+    html+='<div class="mcq-chip"><div class="mcq-chip-lbl">ප්‍ර '+n+'</div><div class="mcq-chip-ans">'+v+'</div><div class="mcq-chip-mark '+(r.ok?'mcq-chip-ok':'mcq-chip-no')+'">'+(r.ok?'✓ නිවැරදි':'✗ →'+correct)+'</div><div style="font-size:13px;font-weight:700;color:'+(r.ok?'#2e7d32':'#c62828')+'">'+r.marks+'ල.</div></div>';
+  });
+  html+='</div></div>';
+
+  html+='<div class="sigs">';
+  ['ශිෂ්‍ය අත්සන / Student','ගුරු අත්සන / Examiner','විදුහල්පති / Principal'].forEach(l=>{html+='<div class="sig">'+l+'</div>';});
+  html+='</div>';
+  html+='<div class="print-footer">ශ්‍රී ලංකා තාක්ෂණ විද්‍යාලය — මරදාන · Craft Level Science 2026 · '+escHtml(s.submittedAt)+'</div>';
+
+  e('printPage').innerHTML=html;
+  showScreen('printview');
+}
+function hidePrint(){showSheet();}
+function updateSubsHint(){
+  const h=e('subsHint');
+  if(h)h.innerHTML=subs.length?'📊 Submissions '+subs.length+' — <a onclick="showSheet()">Sheet බලන්න</a>':'';
+}
+
+// ── init ───────────────────────────────────────────────
+(async function(){
+  await loadSubs();
+  updateSubsHint();
+})();
+</script>
+</body>
+</html>
