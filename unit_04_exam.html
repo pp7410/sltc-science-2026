@@ -1,0 +1,1167 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ඒකකය 4 -- සමතලා බල</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Noto Sans Sinhala","Segoe UI",Arial,sans-serif;background:#0d1520;color:#e0e0e0;min-height:100vh}
+button,input,textarea,select{font-family:inherit}
+.scr{display:none}.scr.on{display:block}
+
+/* -- COVER -- */
+#sCover{padding:24px 16px;max-width:640px;margin:0 auto}
+.ihead{text-align:center;margin-bottom:24px}
+.iicon{width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,#6A1B9A,#6A1B9A88);display:flex;align-items:center;justify-content:center;font-size:26px;margin:0 auto 10px}
+.iname{font-size:19px;font-weight:700;color:#fff}.isub{font-size:13px;color:#90caf9;margin-top:3px}.icraft{font-size:11px;color:#666;margin-top:2px}
+.ucard{background:linear-gradient(135deg,#6A1B9A30,#6A1B9A10);border:1px solid #6A1B9A66;border-radius:18px;padding:24px 22px 18px;margin-bottom:18px}
+.ubadges{display:flex;gap:10px;margin-bottom:10px;flex-wrap:wrap;align-items:center}
+.bno{background:#6A1B9A;border-radius:10px;padding:6px 16px;font-size:14px;font-weight:800;color:#fff}
+.bcod{font-size:12px;color:#777;background:rgba(255,255,255,0.06);padding:5px 12px;border-radius:6px}
+.utit{font-size:19px;font-weight:700;color:#fff;margin-bottom:3px}
+.uen{font-size:13px;color:#90a4ae;margin-bottom:14px}
+.umeta{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.umeta-item{background:rgba(0,0,0,0.3);border-radius:10px;padding:9px;text-align:center}
+.umeta-lbl{font-size:11px;color:#666}.umeta-val{font-size:12px;font-weight:600;color:#ddd;margin-top:2px}
+.usecs{display:flex;gap:8px;flex-wrap:wrap}
+.usec{border-radius:8px;padding:5px 12px;display:flex;gap:8px;align-items:center;font-size:12px}
+.sinfo{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:18px 20px;margin-bottom:18px}
+.sinfo-ttl{font-size:13px;font-weight:600;color:#90caf9;margin-bottom:12px}
+.flbl{font-size:12px;color:#888;display:block;margin-bottom:4px}
+.finp{width:100%;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:8px;padding:10px 14px;color:#fff;font-size:15px;outline:none;margin-bottom:10px}
+.finp:focus{border-color:#6A1B9A}
+.btn-start{width:100%;background:linear-gradient(135deg,#6A1B9A,#6A1B9Acc);color:#fff;border:none;border-radius:12px;padding:14px;font-size:16px;font-weight:700;cursor:pointer}
+.btn-start:hover{opacity:.9}
+.btn-ghost{background:rgba(255,255,255,0.07);color:#ccc;border:1px solid rgba(255,255,255,0.15);border-radius:8px;padding:8px 16px;cursor:pointer;font-size:13px}
+.btn-ghost:hover{background:rgba(255,255,255,0.12)}
+.btn-red{background:rgba(183,28,28,0.2);color:#ef9a9a;border:1px solid rgba(183,28,28,0.4);border-radius:8px;padding:8px 16px;cursor:pointer;font-size:13px}
+.sbhint{text-align:center;margin-top:10px;font-size:12px;color:#555}
+
+/* -- EXAM -- */
+#sExam{padding:12px;max-width:800px;margin:0 auto}
+.topbar{position:sticky;top:0;z-index:50;background:#0d1520ee;border-radius:12px;padding:10px 16px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;border:1px solid rgba(255,255,255,0.08)}
+.topbar-name{font-size:13px;font-weight:600;color:#fff}.topbar-info{font-size:11px;color:#888;margin-top:1px}
+.topbar-R{display:flex;gap:10px;align-items:center}
+.prog-bar{background:rgba(255,255,255,0.06);border-radius:4px;height:4px;margin-bottom:20px}
+.prog-fill{height:100%;background:linear-gradient(90deg,#6A1B9A,#6A1B9A88);border-radius:4px;transition:width .3s}
+.sec-hdr{border-radius:12px 12px 0 0;padding:12px 18px;margin-top:24px}
+.sec-hdr-t{font-size:15px;font-weight:700;color:#fff}.sec-hdr-s{font-size:12px;color:rgba(255,255,255,.7);margin-top:1px}
+.qbox{border-top:none;padding:14px 16px;margin-bottom:2px}
+.qrow{display:flex;gap:10px;align-items:flex-start;margin-bottom:12px}
+.qnum{border-radius:7px;padding:4px 11px;font-size:13px;font-weight:700;color:#fff;white-space:nowrap;flex-shrink:0}
+.qtxt{font-size:14px;color:#ddd;line-height:1.7;flex:1;white-space:pre-wrap}
+.qmk{font-size:12px;font-weight:700;white-space:nowrap}
+.mcq-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.mcq-btn{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:10px 12px;color:#ccc;font-size:14px;cursor:pointer;text-align:left;display:flex;gap:8px;align-items:flex-start;line-height:1.5;width:100%}
+.mcq-btn:hover{background:rgba(255,255,255,0.1)}
+.mcq-btn.sel{background:#1565c0;border:2px solid #42a5f5;color:#fff}
+.mcq-ltr{font-weight:800;color:#555;min-width:18px;flex-shrink:0}
+.mcq-btn.sel .mcq-ltr{color:#90caf9}
+.ta{width:100%;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:11px 13px;color:#e0e0e0;font-size:14px;resize:vertical;outline:none;line-height:1.7}
+.ta:focus{border-color:#6A1B9A}
+.submit-box{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:22px;text-align:center;margin:8px 0 40px}
+.sub-status{font-size:13px;margin-bottom:14px}
+.btn-submit{background:linear-gradient(135deg,#6A1B9A,#6A1B9Aaa);color:#fff;border:none;border-radius:12px;padding:14px 48px;font-size:16px;font-weight:700;cursor:pointer}
+
+/* -- OK -- */
+#sOk{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px}
+.ok-box{background:rgba(255,255,255,0.05);border:1px solid rgba(102,187,106,0.35);border-radius:20px;padding:44px 36px;text-align:center;max-width:400px;width:100%}
+
+/* -- SHEET -- */
+#sSheet{padding:18px;max-width:1300px;margin:0 auto}
+.sh-hdr{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:18px;flex-wrap:wrap;gap:10px}
+.stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px;margin-bottom:16px}
+.stat-box{background:rgba(255,255,255,0.04);border-radius:10px;padding:12px 8px;text-align:center}
+.stat-n{font-size:24px;font-weight:800}.stat-l{font-size:11px;color:#888;margin-top:2px}
+.tbl-wrap{overflow-x:auto}
+.tbl-hdr,.tbl-row{padding:8px 12px;display:grid;grid-template-columns:28px 1fr 90px 70px 36px 36px 36px 36px 44px 44px 52px 52px 52px 56px 60px 130px;gap:4px;align-items:center;min-width:950px}
+.tbl-hdr{background:rgba(255,255,255,0.07);border-radius:10px 10px 0 0;font-size:11px;color:#888;font-weight:700}
+.tbl-row{border-bottom:1px solid rgba(255,255,255,0.05);cursor:pointer}
+.tbl-row:hover{background:rgba(255,255,255,0.04)}
+.tbl-row.odd{background:rgba(255,255,255,0.015)}
+.expand-area{padding:14px 16px 20px;background:rgba(0,0,0,0.25);border-bottom:1px solid rgba(255,255,255,0.06)}
+.mark-panel{background:#f57f1715;border:1px solid #f57f1744;border-radius:10px;padding:14px 16px;margin-bottom:14px}
+.mark-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px;margin-bottom:12px}
+.mq-card{background:rgba(0,0,0,0.3);border-radius:8px;padding:10px 11px}
+.mq-inp{width:54px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:6px;padding:5px 7px;color:#fff;font-size:16px;font-weight:700;text-align:center;outline:none}
+.running-total{background:rgba(0,0,0,0.3);border-radius:8px;padding:10px 14px;margin-bottom:12px;display:flex;gap:20px;align-items:center;flex-wrap:wrap}
+.ans-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px}
+.ans-card{background:rgba(0,0,0,0.35);border-radius:10px;padding:12px;border:1px solid rgba(255,255,255,0.06)}
+.ans-val{font-size:13px;color:#ddd;background:rgba(255,255,255,0.05);border-radius:6px;padding:7px 10px;white-space:pre-wrap;line-height:1.6;min-height:28px}
+
+/* -- PRINT -- */
+#sPrint{display:none;background:#f0f2f5;min-height:100vh}
+.pt-bar{background:#1a2744;padding:12px 24px;display:flex;gap:12px;align-items:center;position:sticky;top:0;z-index:100}
+.pt-page{background:#fff;max-width:794px;margin:20px auto;border-radius:4px;box-shadow:0 4px 20px rgba(0,0,0,0.15);overflow:hidden;font-family:"Noto Sans Sinhala","Segoe UI",Arial,sans-serif;color:#111}
+
+/* Print page header band */
+.pt-header-band{background:#6A1B9A;padding:18px 28px;display:flex;justify-content:space-between;align-items:center}
+.pt-inst-name{font-size:18px;font-weight:800;color:#fff;letter-spacing:0.5px}
+.pt-inst-sub{font-size:11px;color:rgba(255,255,255,0.8);margin-top:2px}
+.pt-inst-craft{font-size:10px;color:rgba(255,255,255,0.65);margin-top:1px}
+.pt-unit-badge{background:rgba(255,255,255,0.2);border-radius:10px;padding:8px 14px;text-align:center;border:1px solid rgba(255,255,255,0.3)}
+.pt-unit-no{font-size:24px;font-weight:900;color:#fff;line-height:1}
+.pt-unit-code{font-size:10px;color:rgba(255,255,255,0.8);margin-top:2px}
+
+/* Unit title bar */
+.pt-unit-bar{background:#6A1B9A18;border-bottom:2px solid #6A1B9A44;padding:10px 28px;text-align:center}
+.pt-unit-title{font-size:16px;font-weight:700;color:#6A1B9A}
+.pt-unit-en{font-size:11px;color:#666;margin-top:2px}
+
+/* Student card */
+.pt-stu-section{padding:16px 28px 12px}
+.pt-stu-label{font-size:11px;color:#999;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;font-weight:600}
+.pt-stu-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1.5px solid #6A1B9A44;border-radius:8px;overflow:hidden}
+.pt-stu-cell{padding:10px 14px;border-bottom:1px solid #e8e8e8}
+.pt-stu-cell:nth-last-child(-n+2){border-bottom:none}
+.pt-stu-cell-lbl{display:block;font-size:10px;color:#999;text-transform:uppercase;letter-spacing:0.4px;margin-bottom:3px;font-weight:600}
+.pt-stu-cell-val{font-size:15px;font-weight:700;color:#111}
+.pt-stu-cell.accent{background:#6A1B9A08}
+
+/* Marks section */
+.pt-marks-section{padding:8px 28px 16px}
+.pt-section-label{font-size:11px;color:#999;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;font-weight:600;display:flex;align-items:center;gap:8px}
+.pt-section-label::after{content:'';flex:1;height:1px;background:#e0e0e0}
+
+/* Marks table */
+.pt-marks-table{width:100%;border-collapse:collapse;font-size:12px}
+.pt-marks-table th{background:#6A1B9A;color:#fff;padding:8px 10px;font-weight:700;font-size:11px}
+.pt-marks-table th:first-child{border-radius:6px 0 0 0}
+.pt-marks-table th:last-child{border-radius:0 6px 0 0}
+.pt-marks-table td{padding:7px 10px;border-bottom:1px solid #f0f0f0}
+.pt-marks-table tr:last-child td{border-bottom:none}
+.pt-sub-row td{font-weight:700;font-size:12px}
+
+/* Result section */
+.pt-result-section{padding:8px 28px 20px}
+.pt-result-cards{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:14px}
+.pt-result-card{border-radius:10px;padding:14px;text-align:center}
+.pt-result-card-lbl{font-size:10px;color:#999;text-transform:uppercase;letter-spacing:0.4px;margin-bottom:6px;font-weight:600}
+.pt-result-card-val{font-size:36px;font-weight:900;line-height:1}
+.pt-result-card-sub{font-size:12px;margin-top:4px;font-weight:600}
+
+/* MCQ mini boxes */
+.pt-mcq-row{display:flex;gap:8px;margin-bottom:14px}
+.pt-mcq-card{flex:1;border-radius:8px;padding:9px 8px;text-align:center;border:1.5px solid}
+.pt-mcq-qno{font-size:10px;color:#888;margin-bottom:3px}
+.pt-mcq-ans{font-size:20px;font-weight:900}
+.pt-mcq-correct{font-size:10px;color:#888;margin-top:2px}
+.pt-mcq-verdict{font-size:11px;font-weight:700;margin-top:2px}
+
+/* Grade scale */
+.pt-scale{background:#f8f9fa;border:1px solid #e8e8e8;border-radius:8px;padding:10px 14px;margin-bottom:14px}
+.pt-scale-items{display:flex;gap:20px;flex-wrap:wrap;margin-top:6px}
+
+/* Signatures */
+.pt-sig-section{border-top:2px solid #6A1B9A22;padding:16px 28px;display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.pt-sig{text-align:center}
+.pt-sig-line{border-top:1.5px solid #333;margin-bottom:6px;margin-top:32px}
+.pt-sig-label{font-size:11px;color:#666}
+.pt-sig-date{font-size:10px;color:#aaa;margin-top:2px}
+
+/* Footer band */
+.pt-footer-band{background:#6A1B9A12;border-top:1px solid #6A1B9A33;padding:8px 28px;display:flex;justify-content:space-between;align-items:center}
+.pt-footer-l{font-size:10px;color:#888}
+.pt-footer-r{font-size:10px;color:#aaa}
+
+@media print{
+  #sPrint{display:block!important}
+  .pt-bar{display:none!important}
+  body > *:not(#sPrint){display:none!important}
+  #sPrint{background:#fff}
+  .pt-page{margin:0;box-shadow:none;border-radius:0}
+  @page{margin:0;size:A4}
+}
+/* -- EDITOR -- */
+#sEditor{padding:18px;max-width:900px;margin:0 auto}
+.ed-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:10px}
+.ed-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px}
+.ed-tab{padding:7px 16px;border-radius:8px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.05);color:#aaa;cursor:pointer;font-size:13px;font-family:inherit}
+.ed-tab.active{border-color:#6A1B9A;background:#6A1B9A22;color:#fff;font-weight:700}
+.ed-qcard{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:18px 20px;margin-bottom:14px}
+.ed-qcard-hdr{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.ed-qbadge{border-radius:8px;padding:5px 13px;font-size:13px;font-weight:700;color:#fff}
+.ed-marks-inp{width:60px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.2);border-radius:6px;padding:5px 8px;color:#fff;font-size:14px;font-weight:700;text-align:center;outline:none}
+.ed-field-lbl{font-size:11px;color:#888;display:block;margin-bottom:4px;margin-top:10px;text-transform:uppercase;letter-spacing:0.4px}
+.ed-inp{width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.14);border-radius:8px;padding:9px 13px;color:#e0e0e0;font-size:14px;outline:none;font-family:inherit}
+.ed-inp:focus{border-color:#6A1B9A}
+.ed-ta{width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.14);border-radius:8px;padding:9px 13px;color:#e0e0e0;font-size:14px;resize:vertical;outline:none;font-family:inherit;line-height:1.7}
+.ed-ta:focus{border-color:#6A1B9A}
+.ed-opts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px}
+.ed-opt-row{display:flex;gap:6px;align-items:center}
+.ed-opt-ltr{font-weight:800;font-size:14px;min-width:22px}
+.ed-key-btn{width:34px;height:34px;border-radius:6px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.05);color:#aaa;cursor:pointer;font-size:14px;font-weight:700;flex-shrink:0;font-family:inherit}
+.ed-key-btn.correct{background:#1b5e20;border-color:#4caf50;color:#a5d6a7}
+.ed-save-bar{position:sticky;bottom:0;background:#0d1520ee;border-top:1px solid #6A1B9A44;padding:13px 20px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:16px}
+.btn-ed-save{background:linear-gradient(135deg,#6A1B9A,#6A1B9Acc);color:#fff;border:none;border-radius:10px;padding:11px 28px;cursor:pointer;font-size:14px;font-weight:700;font-family:inherit}
+.btn-ed-reset{background:rgba(183,28,28,0.2);color:#ef9a9a;border:1px solid rgba(183,28,28,0.4);border-radius:10px;padding:11px 18px;cursor:pointer;font-size:13px;font-family:inherit}
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div id="sCover" class="scr on">
+  <div class="ihead">
+    <div class="iicon">🏫</div>
+    <div class="iname">ශ්‍රී ලංකා තාක්ෂණ විද්‍යාලය</div>
+    <div class="isub">ශ්‍රී ලංකා තාක්ෂণ විද්‍යාලය -- මරදාන</div>
+    <div class="icraft">ශිල්ප අදියර · Science 2026</div>
+  </div>
+  <div class="ucard">
+    <div class="ubadges"><div class="bno">ඒකකය 4</div><div class="bcod">021.04.01</div></div>
+    <div class="utit">සමතලා බල</div>
+    <div class="uen">Coplanar Forces</div>
+    <div class="umeta">
+      <div class="umeta-item"><div class="umeta-lbl">📅 දිනය</div><div class="umeta-val">2026 මැයි 22</div></div>
+      <div class="umeta-item"><div class="umeta-lbl">⏱ කාලය</div><div class="umeta-val">1 පැය</div></div>
+      <div class="umeta-item"><div class="umeta-lbl">🎯 ලකුණු</div><div class="umeta-val">100</div></div>
+    </div>
+    <div class="usecs">
+      <div class="usec" style="background:#1565c033;border:1px solid #1565c055"><span style="font-weight:700;color:#90caf9">A</span><span style="color:#bbb">MCQ×4</span><span style="color:#90caf9;font-weight:700">20</span></div>
+      <div class="usec" style="background:#2e7d3233;border:1px solid #2e7d3255"><span style="font-weight:700;color:#a5d6a7">B</span><span style="color:#bbb">කෙටි×3</span><span style="color:#a5d6a7;font-weight:700">30</span></div>
+      <div class="usec" style="background:#7b1fa233;border:1px solid #7b1fa255"><span style="font-weight:700;color:#ce93d8">C</span><span style="color:#bbb">ව්‍යු×3</span><span style="color:#ce93d8;font-weight:700">50</span></div>
+    </div>
+  </div>
+  <div class="sinfo">
+    <div class="sinfo-ttl">ශිෂ්‍ය තොරතුරු</div>
+    <label class="flbl">ශිෂ්‍ය නම *</label><input id="inName" class="finp" placeholder="නම ලියන්න">
+    <label class="flbl">Index අංකය *</label><input id="inId" class="finp" placeholder="Index අංකය">
+    <label class="flbl">වාරය</label><input id="inBatch" class="finp" placeholder="Batch (අත්‍යවශ්‍ය නොවේ)">
+  </div>
+  <button class="btn-start" onclick="doStart()">▶  ප්‍රශ්නය ආරම්භ කරන්න</button>
+  <div class="sbhint" id="subsHint"></div>
+  <div style="display:flex;gap:10px;margin-top:12px;justify-content:center">
+    <button class="btn-ghost" onclick="showScr('sHelp')">📖 උදව්</button>
+    <button class="btn-ghost" style="font-size:11px;opacity:0.25;padding:6px 10px" onclick="showScr('sLogin')">🔐</button>
+  </div>
+</div>
+
+
+<!-- LOGIN -->
+<div id="sLogin" class="scr">
+  <div style="display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px">
+    <div style="background:rgba(255,255,255,0.05);border:1px solid #6A1B9A44;border-radius:20px;padding:36px 28px;max-width:360px;width:100%;text-align:center">
+      <div style="font-size:36px;margin-bottom:12px">🔐</div>
+      <div style="font-size:18px;font-weight:700;color:#fff;margin-bottom:4px">ගුරු තුමාගේ ප්‍රවේශය</div>
+      <div style="font-size:12px;color:#666;margin-bottom:24px">Password ඇතුළු කරන්න</div>
+      <input id="pwInput" type="password" class="finp" placeholder="Password" style="text-align:center;letter-spacing:4px;font-size:18px" onkeydown="if(event.key==='Enter')doLogin()">
+      <div id="pwErr" style="font-size:12px;color:#ef5350;margin-top:8px;min-height:18px"></div>
+      <button class="btn-start" style="margin-top:12px" onclick="doLogin()">ඇතුළු වන්න</button>
+      <button class="btn-ghost" style="width:100%;margin-top:10px" onclick="showScr('sCover')">← ආපසු</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- TEACHER PANEL -->
+<div id="sTeacher" class="scr">
+  <div style="display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px">
+    <div style="background:rgba(255,255,255,0.05);border:1px solid #6A1B9A44;border-radius:20px;padding:36px 28px;max-width:400px;width:100%;text-align:center">
+      <div style="font-size:32px;margin-bottom:10px">👨‍🏫</div>
+      <div style="font-size:18px;font-weight:700;color:#fff;margin-bottom:4px">ගුරු තුමාගේ panel</div>
+      <div style="font-size:12px;color:#888;margin-bottom:24px">ඒකකය 4 — සමතලා බල</div>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px">
+        <button class="btn-start" style="background:linear-gradient(135deg,#1565c0,#1565c0cc)" onclick="showScr('sSheet')">
+          📋 ලකුණු Sheet බලන්න
+        </button>
+        <button class="btn-start" style="background:linear-gradient(135deg,#2e7d32,#2e7d32cc)" onclick="showScr('sEditor')">
+          ⚙️ ප්‍රශ්න සංස්කරණය
+        </button>
+      </div>
+      <button class="btn-ghost" style="width:100%" onclick="showScr('sCover')">← ශිෂ්‍ය screen</button>
+    </div>
+  </div>
+</div>
+
+<!-- HELP -->
+<div id="sHelp" class="scr">
+  <div style="max-width:640px;margin:0 auto;padding:24px 16px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+      <div style="font-size:19px;font-weight:700;color:#fff">📖 ශිෂ්‍ය මාර්ගෝපදේශය</div>
+      <button class="btn-ghost" onclick="showScr('sCover')">← ආපසු</button>
+    </div>
+    <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:20px;margin-bottom:14px">
+      <div style="font-size:15px;font-weight:700;color:#90caf9;margin-bottom:14px">📱 මෙම ගොනුව ලැබෙන ආකාරය</div>
+      <div style="font-size:13px;color:#ccc;line-height:2.1">
+        ✅ WhatsApp / Email හෝ USB Drive මගින් ලැබිය හැකිය<br>
+        ✅ Chrome, Firefox, Edge browser හිදී ක්‍රියා කරයි<br>
+        ✅ Internet සම්බන්ධතාවය අවශ්‍ය නොවේ<br>
+        ✅ Phone / Tablet / PC -- ඕනෑ device එකක
+      </div>
+    </div>
+    <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:20px;margin-bottom:14px">
+      <div style="font-size:15px;font-weight:700;color:#a5d6a7;margin-bottom:14px">📝 විභාගය සම්පූර්ණ කිරීම</div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="display:flex;gap:12px;align-items:flex-start"><div style="background:#90caf933;color:#90caf9;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;flex-shrink:0">1</div><div style="font-size:13px;color:#ccc;line-height:1.6">ශිෂ්‍ය නම හා Index අංකය ලියා ▶ ආරම්භ click කරන්න</div></div>
+        <div style="display:flex;gap:12px;align-items:flex-start"><div style="background:#a5d6a733;color:#a5d6a7;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;flex-shrink:0">2</div><div style="font-size:13px;color:#ccc;line-height:1.6">A කොටස -- MCQ: A/B/C/D buttons click කරන්න</div></div>
+        <div style="display:flex;gap:12px;align-items:flex-start"><div style="background:#a5d6a733;color:#a5d6a7;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;flex-shrink:0">3</div><div style="font-size:13px;color:#ccc;line-height:1.6">B කොටස -- කෙටි පිළිතුරු: text box හි ලියන්න</div></div>
+        <div style="display:flex;gap:12px;align-items:flex-start"><div style="background:#ce93d833;color:#ce93d8;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;flex-shrink:0">4</div><div style="font-size:13px;color:#ccc;line-height:1.6">C කොටස -- ව්‍යුහගත: සියලු ගිනීම් ඒකක සහිතව ලියන්න</div></div>
+        <div style="display:flex;gap:12px;align-items:flex-start"><div style="background:#ffa72633;color:#ffa726;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;flex-shrink:0">5</div><div style="font-size:13px;color:#ccc;line-height:1.6">✅ ඉදිරිපත් කරන්න click කළ විට ඔබේ data save වේ</div></div>
+      </div>
+    </div>
+    <div style="background:rgba(255,165,0,0.08);border:1px solid rgba(255,165,0,0.25);border-radius:14px;padding:16px 20px">
+      <div style="font-size:13px;font-weight:700;color:#ffa726;margin-bottom:8px">⚠️ වැදගත්</div>
+      <div style="font-size:12px;color:#ccc;line-height:1.9">
+        • Browser close කළ පසුද data ඔබේ device හි ඉතිරිව ඇත<br>
+        • MCQ ලකුණු ස්වයංක්‍රීයව ගිනේ<br>
+        • Submit කිරීමෙන් පසු ගුරු තුමා 🖨️ button click කළ විට print sheet ලැබේ
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- EXAM -->
+<div id="sExam" class="scr">
+  <div class="topbar">
+    <div><div class="topbar-name">ඒකකය 4 -- සමතලා බල</div><div class="topbar-info" id="tbInfo"></div></div>
+    <div class="topbar-R">
+      <span id="doneCount" style="font-size:12px;color:#ffa726">0/10</span>
+      <button class="btn-ghost" onclick="showScr('sCover')">← ආපසු</button>
+    </div>
+  </div>
+  <div class="prog-bar"><div class="prog-fill" id="pFill" style="width:0%"></div></div>
+  <div id="examBody"></div>
+  <div class="submit-box">
+    <div class="sub-status" id="subStatus">⚠️ ප්‍රශ්න සම්පූර්ණ කරන්න</div>
+    <button class="btn-submit" onclick="doSubmit()">✅  ඉදිරිපත් කරන්න</button>
+  </div>
+</div>
+
+<!-- OK -->
+<div id="sOk" class="scr">
+  <div style="display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px">
+    <div class="ok-box">
+      <div style="font-size:68px;margin-bottom:14px">✅</div>
+      <h2 style="color:#a5d6a7;font-size:21px;margin:0 0 8px">ඉදිරිපත් කළා!</h2>
+      <div style="color:#e0e0e0;font-weight:600;font-size:16px;margin:6px 0 2px" id="okName"></div>
+      <div style="color:#888;font-size:13px" id="okId"></div>
+      <div style="display:flex;gap:10px;justify-content:center;margin-top:24px">
+        <button class="btn-start" style="padding:11px 24px;width:auto" onclick="resetගෙදර()">🏠 ගෙදර</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SHEET -->
+<div id="sSheet" class="scr">
+  <div style="padding:18px;max-width:1300px;margin:0 auto">
+    <div class="sh-hdr">
+      <div>
+        <div style="font-size:11px;color:#555;margin-bottom:3px">ශ්‍රී ලංකා තාක්ෂණ විද්‍යාලය -- මරදාන</div>
+        <div style="font-size:18px;font-weight:700;color:#fff;margin-bottom:3px">📋 ලකුණු Sheet -- ඒකකය 4</div>
+        <div style="font-size:11px;color:#ffa726;margin-bottom:4px;min-height:16px" id="syncStatus">⏳ Cloud loading...</div>
+        <div style="font-size:13px;color:#777" id="shSub">සමතලා බල · 2026 මැයි 22</div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <button class="btn-ghost" onclick="showScr('sTeacher')">← ගුරු panel</button>
+        <button class="btn-ghost" onclick="refreshCloud()">☁️ Refresh</button>
+        <button class="btn-red" onclick="clearAll()">🗑 සියල්ල මකන්න</button>
+      </div>
+    </div>
+    <div class="stats" id="statsRow"></div>
+    <div class="tbl-wrap">
+      <div class="tbl-hdr">
+        <span>#</span><span>නම</span><span>Index</span><span>වාරය</span>
+        <span style="color:#90caf9">P1</span><span style="color:#90caf9">P2</span><span style="color:#90caf9">P3</span><span style="color:#90caf9">P4</span>
+        <span style="color:#a5d6a7">P5</span><span style="color:#a5d6a7">P6</span><span style="color:#a5d6a7">P7</span>
+        <span style="color:#ce93d8">P8</span><span style="color:#ce93d8">P9</span><span style="color:#ce93d8">P10</span>
+        <span style="color:#ffd700">Total</span><span>Grade</span><span>Actions</span>
+      </div>
+      <div id="shRows"></div>
+    </div>
+    <div id="emptySheet" style="display:none;text-align:center;padding:70px 0;color:#555">
+      <div style="font-size:50px;margin-bottom:14px">📭</div>
+      <div>තවම Submissions නැත</div>
+      <button class="btn-start" style="margin-top:16px;padding:11px 28px;width:auto" onclick="showScr('sCover')">← ආපසු</button>
+    </div>
+  </div>
+</div>
+
+<!-- PRINT -->
+<div id="sPrint">
+  <div class="pt-bar">
+    <button onclick="window.print()" style="background:#1565c0;color:#fff;border:none;border-radius:8px;padding:10px 24px;cursor:pointer;font-size:14px;font-weight:700">🖨️ මුද්‍රණය / PDF සුරකින්න</button>
+    <button onclick="hidePrint()" style="background:rgba(255,255,255,0.1);color:#fff;border:1px solid rgba(255,255,255,0.2);border-radius:8px;padding:10px 20px;cursor:pointer;font-size:14px">← ආපසු</button>
+    <span style="color:#90caf9;font-size:13px">Ctrl+P ඔබා මුද්‍රණය කරන්න හෝ PDF ලෙස සුරකින්න</span>
+  </div>
+  <div id="printPage" class="pt-page"></div>
+</div>
+
+<script>
+const UNIT = {"no":4,"code":"021.04.01","color":"#6A1B9A","title":"සමතලා බල","titleEn":"Coplanar Forces","date":"2026 මැයි 22","questions":[{"no":1,"type":"MCQ","marks":5,"text":"Magnitude + Direction ඇති රාශිය:","opts":["Scalar","Tensor","Vector (දෛශික)","Constant"]},{"no":2,"type":"MCQ","marks":5,"text":"Moment of a Force =","opts":["F × v","F × ලම්බ දුර","F ÷ d","F × A"]},{"no":3,"type":"MCQ","marks":5,"text":"Coplanar Equilibrium — කොන්දේසි:","opts":["F සමාන","ΣF=0 AND ΣM=0","ΣF=0 පමණි","ΣM=0 පමණි"]},{"no":4,"type":"MCQ","marks":5,"text":"Displaced → නැවත මූල ස්ථානයට:","opts":["Unstable","Neutral","Static","Stable (ස්ථාවර)"]},{"no":5,"type":"Short","marks":10,"text":"(අ) Parallelogram Law ප්‍රකාශ. (ලකු 3)\n(ආ) F₁=60N, F₂=80N, θ=90°:\n  (i) R (ලකු 4)\n  (ii) θ with 80N (ලකු 3)"},{"no":6,"type":"Short","marks":10,"text":"(අ) Centre of Gravity නිර්ව. (ලකු 2)\n(ආ) CG — rod/rectangle/circle (ලකු 3)\n(ඇ) Beam L=4m, W=200N, P=500N@1.5m → R_A, R_B (ලකු 5)"},{"no":7,"type":"Short","marks":10,"text":"(අ) Couple නිර්ව. (ලකු 2)\n(ආ) F=25N, d=0.4m → M (ලකු 3)\n(ඇ) Stable/Unstable/Neutral — නිදසු + සංසන්දනය. (ලකු 5)"},{"no":8,"type":"Struct","marks":16,"text":"T₁@30°, T₂@60°, W=150N (sign board)\n(අ) Free Body Diagram. (ලකු 3)\n(ආ) Components. (ලකු 4)\n(ඇ) T₁, T₂ solve. (ලකු 7)\n(ඈ) T₂>T₁? හේතු. (ලකු 2)"},{"no":9,"type":"Struct","marks":17,"text":"F₁=100N(0°), F₂=80N(90°), F₃=60N(210°)\n(i) x,y components (ලකු 6)\n(ii) ΣFx, ΣFy (ලකු 2)\n(iii) R magnitude (ලකු 2)\n(iv) θ (ලකු 2)\n(v) Polygon of Forces (ලකු 5)"},{"no":10,"type":"Struct","marks":17,"text":"Ladder: L=8m, W=300N, θ=60°, μ=0.35\n(අ) FBD. (ලකු 4)\n(ආ) N_G (ලකු 2)\n(ඇ) N_W (ලකු 6)\n(ඈ) F (ලකු 2)\n(ඉ) ලිස්සෙයිද? (ලකු 3)"}]};
+const ANSWER_KEY = {"1":1,"2":0,"3":2,"4":3};
+const LABELS = ['A','B','C','D'];
+const SK = 'sltc_u4_v6';
+const MAX = UNIT.questions.reduce((t,q)=>t+q.marks,0);
+
+let student={name:'',id:'',batch:''};
+let answers={};
+let subs=[];
+let expandedId=null;
+let markingId=null;
+let markingData={};
+let editId=null;
+let editAns={};
+
+
+/* === SUPABASE CLOUD SYNC === */
+const SB_URL = 'https://ipyaeqmoawnugxvpvzwn.supabase.co';
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlweWFlcW1vYXdudWd4dnB2enduIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM0MDUxNDUsImV4cCI6MjA4ODk4MTE0NX0.ImDnwWoLP1tuKHn6DUGobESlyVWgR_1H7igujqFU52g';
+const SB_HDR = {'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','Prefer':'return=representation'};
+let cloudOk = null;
+
+function setSyncStatus(ok, msg){
+  cloudOk = ok;
+  const el = document.getElementById('syncStatus');
+  if(el){ el.textContent = (ok===true?'☁️ ':ok===false?'📵 ':'⏳ ') + msg; el.style.color = ok===true?'#66bb6a':'#ffa726'; }
+}
+
+async function sbFetch(path, opts){
+  opts = opts||{};
+  return fetch(SB_URL+'/rest/v1/'+path, Object.assign({}, opts, {headers: Object.assign({}, SB_HDR, opts.headers||{})}));
+}
+
+async function loadSubs(){
+  try{const r=localStorage.getItem(SK);if(r)subs=JSON.parse(r);}catch(e){}
+  try{
+    const r = await sbFetch('submissions?unit_no=eq.4&order=id.asc');
+    if(r.ok){
+      const rows = await r.json();
+      const fromCloud = rows.map(row=>({
+        id: row.local_id||row.id,
+        cloudId: row.id,
+        studentName: row.student_name,
+        studentId: row.student_id,
+        studentBatch: row.student_batch||'',
+        submittedAt: row.submitted_at||'',
+        markedAt: row.marked_at||'',
+        editedAt: row.edited_at||'',
+        answers: row.answers||{},
+        examinerMarks: row.examiner_marks||{}
+      }));
+      const cloudLocalIds = new Set(rows.map(x=>x.local_id).filter(Boolean));
+      const localOnly = subs.filter(s=>!cloudLocalIds.has(s.id));
+      subs = [...fromCloud, ...localOnly];
+      localStorage.setItem(SK,JSON.stringify(subs));
+      setSyncStatus(true, 'Cloud sync OK — '+subs.length+' submissions');
+    }
+  }catch(e){ setSyncStatus(false,'Offline — local data only'); }
+}
+
+function saveSubs(){
+  try{localStorage.setItem(SK,JSON.stringify(subs));}catch(e){}
+}
+
+async function pushToCloud(sub){
+  try{
+    const payload = {
+      unit_no: 4,
+      student_name: sub.studentName,
+      student_id: sub.studentId,
+      student_batch: sub.studentBatch||'',
+      answers: sub.answers,
+      examiner_marks: sub.examinerMarks||{},
+      submitted_at: sub.submittedAt||'',
+      marked_at: sub.markedAt||'',
+      edited_at: sub.editedAt||'',
+      local_id: sub.id
+    };
+    let r;
+    if(sub.cloudId){
+      r = await sbFetch('submissions?id=eq.'+sub.cloudId, {method:'PATCH', body:JSON.stringify(payload)});
+    } else {
+      r = await sbFetch('submissions', {method:'POST', body:JSON.stringify(payload)});
+      if(r.ok){ const rows=await r.json(); if(rows&&rows[0]) sub.cloudId=rows[0].id; }
+    }
+    saveSubs();
+    setSyncStatus(true,'☁️ Saved to cloud');
+    return true;
+  }catch(e){ setSyncStatus(false,'Sync failed — local OK'); return false; }
+}
+
+async function deleteFromCloud(cloudId){
+  if(!cloudId) return;
+  try{ await sbFetch('submissions?id=eq.'+cloudId,{method:'DELETE'}); }catch(e){}
+}
+
+
+function gradeInfo(pct){
+  if(pct>=80)return{g:'විශේෂ',c:'#b8860b',bg:'#fffde7',bc:'#f9a825',light:'#fff8e1'};
+  if(pct>=65)return{g:'ගෞරව',c:'#37474f',bg:'#eceff1',bc:'#90a4ae',light:'#f5f5f5'};
+  if(pct>=50)return{g:'සමත්',c:'#4e342e',bg:'#efebe9',bc:'#a1887f',light:'#f3e5f5'};
+  return{g:'අසමත්',c:'#b71c1c',bg:'#ffebee',bc:'#ef9a9a',light:'#ffebee'};
+}
+function totalMarks(s){return UNIT.questions.reduce((t,q)=>t+(Number(s.examinerMarks[q.no])||0),0);}
+
+function showScr(id){
+  document.querySelectorAll('.scr').forEach(s=>s.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  if(id==='sSheet')renderSheet();
+}
+function updateSubsHint(){
+  const h=document.getElementById('subsHint');
+  // Students see only count — no link to sheet
+  h.innerHTML=subs.length?'📊 ශිෂ්‍යයන් '+subs.length+' දෙනා submit කළා':'';
+}
+
+function doStart(){
+  const n=document.getElementById('inName').value.trim();
+  const id=document.getElementById('inId').value.trim();
+  const b=document.getElementById('inBatch').value.trim();
+  if(!n){alert('ශිෂ්‍ය නම ලියන්න!');return;}
+  if(!id){alert('Index අංකය ලියන්න!');return;}
+  student={name:n,id:id,batch:b};
+  answers={};
+  document.getElementById('tbInfo').textContent=n+' · '+id;
+  buildExam();
+  showScr('sExam');
+}
+
+function escH(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+function buildExam(){
+  const secs=[
+    {type:'MCQ',title:'A කොටස -- බහු විකල්ප',sub:'ප්‍ර 01–04 · ලකුණු 5×4=20',c:'#1565c0'},
+    {type:'Short',title:'B කොටස -- කෙටි පිළිතුරු',sub:'ප්‍ර 05–07 · ලකුණු 10×3=30',c:'#2e7d32'},
+    {type:'Struct',title:'C කොටස -- ව්‍යුහගත ප්‍රශ්න',sub:'ප්‍ර 08–10 · ගිනීම් සියල්ල ලියන්න',c:'#7b1fa2'},
+  ];
+  let html='';
+  secs.forEach(si=>{
+    const qs=UNIT.questions.filter(q=>q.type===si.type);
+    if(!qs.length)return;
+    html+='<div class="sec-hdr" style="background:linear-gradient(135deg,'+si.c+'cc,'+si.c+'77)"><div class="sec-hdr-t">'+si.title+'</div><div class="sec-hdr-s">'+si.sub+'</div></div>';
+    qs.forEach(q=>{
+      html+='<div class="qbox" style="background:'+si.c+'12;border:1px solid '+si.c+'33;border-top:none">'
+           +'<div class="qrow"><div class="qnum" style="background:'+si.c+'">ප්‍ර '+q.no+'</div>'
+           +'<div class="qtxt">'+escH(q.text)+'</div>'
+           +'<div class="qmk" style="color:'+si.c+'">'+q.marks+'ල.</div></div>';
+      if(q.type==='MCQ'){
+        html+='<div class="mcq-grid">';
+        q.opts.forEach((op,i)=>{
+          const l=LABELS[i];
+          html+='<button class="mcq-btn" id="mb_'+q.no+'_'+l+'" onclick="pickMCQ('+q.no+',\''+l+'\')"><span class="mcq-ltr">'+l+'.</span><span>'+escH(op)+'</span></button>';
+        });
+        html+='</div>';
+      }else{
+        html+='<textarea class="ta" rows="'+(q.type==='Struct'?10:7)+'" id="ta_'+q.no+'" placeholder="ඔබේ පිළිතුර ලියන්න…" oninput="answers['+q.no+']=this.value;updProg()"></textarea>';
+      }
+      html+='</div>';
+    });
+  });
+  document.getElementById('examBody').innerHTML=html;
+  updProg();
+}
+
+function pickMCQ(no,ltr){
+  answers[no]=ltr;
+  LABELS.forEach(l=>{const b=document.getElementById('mb_'+no+'_'+l);if(b)b.className='mcq-btn'+(l===ltr?' sel':'');});
+  updProg();
+}
+function updProg(){
+  const done=UNIT.questions.filter(q=>answers[q.no]?.toString().trim()).length;
+  document.getElementById('pFill').style.width=(done*10)+'%';
+  const dc=document.getElementById('doneCount');
+  dc.textContent=done+'/10';dc.style.color=done===10?'#66bb6a':'#ffa726';
+  const ss=document.getElementById('subStatus');
+  if(done<10){ss.textContent='⚠️ ප්‍රශ්න '+(10-done)+'ක් හිස්';ss.style.color='#ffa726';}
+  else{ss.textContent='✅ සියල්ල සම්පූර්ණ';ss.style.color='#66bb6a';}
+}
+
+function doSubmit(){
+  const empty=UNIT.questions.filter(q=>!answers[q.no]?.toString().trim());
+  if(empty.length&&!confirm('ප්‍රශ්න '+empty.map(q=>q.no).join(',')+': හිස්. ඉදිරියට?'))return;
+  const sub={id:Date.now(),studentName:student.name,studentId:student.id,studentBatch:student.batch,
+    submittedAt:new Date().toLocaleString('si-LK'),answers:Object.assign({},answers),examinerMarks:{}};
+  UNIT.questions.filter(q=>q.type==='MCQ').forEach(q=>{
+    const correct=ANSWER_KEY[q.no];
+    const chosen=LABELS.indexOf(answers[q.no]||'');
+    sub.examinerMarks[q.no]=(chosen===correct?q.marks:0);
+  });
+  subs.push(sub);saveSubs();updateSubsHint();
+  pushToCloud(sub).then(ok=>{ if(ok) setSyncStatus(true,'☁️ Cloud හි save විණි'); });
+  document.getElementById('okName').textContent=student.name;
+  document.getElementById('okId').textContent=student.id+' · ඒකකය 4';
+  showScr('sOk');
+}
+function resetගෙදර(){
+  student={name:'',id:'',batch:''};answers={};
+  document.getElementById('inName').value='';
+  document.getElementById('inId').value='';
+  document.getElementById('inBatch').value='';
+  showScr('sCover');
+}
+
+/* -- SHEET -- */
+function renderSheet(){
+  const total=subs.length;
+  const marked=subs.filter(s=>Object.keys(s.examinerMarks).length>=10).length;
+  const passed=subs.filter(s=>{const t=totalMarks(s);return t>0&&t/MAX>=0.5;}).length;
+  document.getElementById('statsRow').innerHTML=
+    sBox(total,'ශිෂ්‍යයන්','#6A1B9A')+sBox(marked,'ලකුණු ලේඛිත','#ffa726')+sBox(passed,'සමත් ශිෂ්‍යයන්','#66bb6a');
+  document.getElementById('shSub').textContent='සමතලා බල · 2026 මැයි 22 · Submissions: '+total;
+  const rowsEl=document.getElementById('shRows');
+  const emptyEl=document.getElementById('emptySheet');
+  if(!total){rowsEl.innerHTML='';emptyEl.style.display='block';return;}
+  emptyEl.style.display='none';
+  let html='';
+  subs.forEach((s,idx)=>{
+    const tot=totalMarks(s);const pct=Math.round(tot/MAX*100);const gr=gradeInfo(pct);
+    const hasM=Object.keys(s.examinerMarks).length>0;
+    const isExp=expandedId===s.id;
+    html+='<div id="row_'+s.id+'">';
+    html+='<div class="tbl-row'+(idx%2?' odd':'')+'" onclick="toggleExp('+s.id+')">';
+    html+='<span style="font-size:11px;color:#555">'+(idx+1)+'</span>';
+    html+='<span style="font-size:13px;color:#e0e0e0;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+escH(s.studentName)+'</span>';
+    html+='<span style="font-size:12px;color:#90caf9">'+escH(s.studentId)+'</span>';
+    html+='<span style="font-size:11px;color:#777;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+escH(s.studentBatch||'--')+'</span>';
+    [1,2,3,4].forEach(n=>{
+      const v=s.answers[n];const m=s.examinerMarks[n];
+      const isRight=v&&LABELS.indexOf(v)===ANSWER_KEY[n];
+      html+='<span style="text-align:center">'
+           +(v?'<span style="background:'+(isRight?'#1565c033':'#b71c1c33')+';color:'+(isRight?'#90caf9':'#ef9a9a')+';border-radius:3px;padding:1px 5px;font-weight:700;font-size:11px">'+v+'</span>':'<span style="color:#444;font-size:10px">--</span>')
+           +(m!=null?'<br><span style="font-size:10px;color:'+(m>0?'#66bb6a':'#ef5350')+'">'+m+'ල</span>':'')
+           +'</span>';
+    });
+    [5,6,7,8,9,10].forEach(n=>{
+      const v=s.answers[n];const m=s.examinerMarks[n];
+      html+='<span style="text-align:center">'
+           +(v?.toString().trim()?'<span style="font-size:13px">✓</span>':'<span style="color:#444;font-size:10px">--</span>')
+           +(m!=null?'<br><span style="font-size:10px;color:#ffa726">'+m+'ල</span>':'')
+           +'</span>';
+    });
+    html+='<span style="text-align:center;font-weight:800;color:'+(hasM?'#6A1B9A':'#555')+';font-size:14px">'+(hasM?tot:'--')+'</span>';
+    html+='<span style="text-align:center">'+(hasM?'<span style="font-weight:700;font-size:11px;color:'+gr.c+'">'+gr.g.slice(0,4)+'<br><span style="font-size:10px">'+pct+'%</span></span>':'<span style="color:#555;font-size:10px">--</span>')+'</span>';
+    html+='<span onclick="event.stopPropagation()" style="display:flex;gap:3px;flex-wrap:wrap">'
+         +'<button onclick="startMark('+s.id+')" style="background:#f57f1722;color:#ffa726;border:1px solid #f57f1744;border-radius:4px;padding:3px 7px;cursor:pointer;font-size:10px">✏️ ල.</button>'
+         +'<button onclick="doPrint('+s.id+')" style="background:#1565c022;color:#90caf9;border:1px solid #1565c044;border-radius:4px;padding:3px 7px;cursor:pointer;font-size:10px">🖨️</button>'
+         +'<button onclick="startEdit('+s.id+')" style="background:#2e7d3222;color:#a5d6a7;border:1px solid #2e7d3244;border-radius:4px;padding:3px 7px;cursor:pointer;font-size:10px">📝</button>'
+         +'<button onclick="delSub('+s.id+')" style="background:#b71c1c22;color:#ef9a9a;border:1px solid #b71c1c44;border-radius:4px;padding:3px 7px;cursor:pointer;font-size:10px">🗑</button>'
+         +'</span>';
+    html+='</div>';
+    if(isExp){
+      html+='<div class="expand-area">';
+      html+='<div style="font-size:12px;color:#666;margin-bottom:12px">📅 '+escH(s.submittedAt)+(s.editedAt?' · ✏️ '+escH(s.editedAt):'')+(s.markedAt?' · 🏆 '+escH(s.markedAt):'')+'</div>';
+      if(markingId===s.id)html+=buildMarkPanel(s);
+      if(editId===s.id)html+=buildEditBar();
+      html+=buildAnsGrid(s);
+      html+='</div>';
+    }
+    html+='</div>';
+  });
+  rowsEl.innerHTML=html;
+}
+function sBox(v,l,c){return '<div class="stat-box" style="border:1px solid '+c+'44"><div class="stat-n" style="color:'+c+'">'+v+'</div><div class="stat-l">'+l+'</div></div>';}
+function toggleExp(id){if(markingId||editId)return;expandedId=expandedId===id?null:id;renderSheet();}
+
+function startMark(id){
+  const s=subs.find(x=>x.id===id);if(!s)return;
+  markingId=id;markingData=Object.assign({},s.examinerMarks);expandedId=id;editId=null;renderSheet();
+}
+function buildMarkPanel(s){
+  let h='<div class="mark-panel"><div style="font-size:14px;font-weight:700;color:#ffa726;margin-bottom:12px">✏️  ලකුණු ලේඛනය -- '+escH(s.studentName)+'</div>';
+  h+='<div class="mark-grid">';
+  UNIT.questions.forEach(q=>{
+    if(q.type==='MCQ')return;
+    const sc=q.type==='Short'?'#2e7d32':'#7b1fa2';
+    const val=markingData[q.no]!=null?markingData[q.no]:'';
+    h+='<div class="mq-card" style="border:1px solid '+sc+'33">'
+      +'<div style="font-size:11px;font-weight:700;color:'+sc+';margin-bottom:2px">ප්‍ර '+q.no+' -- උපරිම '+q.marks+'</div>'
+      +'<div style="font-size:11px;color:#888;margin-bottom:7px;line-height:1.4">'+escH(q.text.split('\n')[0].slice(0,50))+'</div>'
+      +'<div style="display:flex;align-items:center;gap:8px">'
+      +'<input type="number" min="0" max="'+q.marks+'" value="'+val+'" class="mq-inp" id="mi_'+q.no+'" oninput="updMark('+q.no+','+q.marks+',this.value)">'
+      +'<span style="font-size:12px;color:#888">/ '+q.marks+'</span>'
+      +'<span style="font-size:11px;font-weight:600" id="mpct_'+q.no+'"></span>'
+      +'</div></div>';
+  });
+  h+='</div>';
+  const mcqTot=[1,2,3,4].reduce((t,n)=>t+(Number(s.examinerMarks[n])||0),0);
+  h+='<div class="running-total">'
+    +'<div><span style="font-size:12px;color:#888">MCQ (ස්වයං): </span><span style="font-size:16px;font-weight:700;color:#66bb6a">'+mcqTot+'</span></div>'
+    +'<div><span style="font-size:12px;color:#888">ලිඛිත: </span><span style="font-size:16px;font-weight:700;color:#ffa726" id="rtW">0</span></div>'
+    +'<div><span style="font-size:12px;color:#888">මුළු ලකුණු: </span><span style="font-size:22px;font-weight:800;color:#ffa726" id="rtT">'+(mcqTot)+'</span><span style="font-size:14px;color:#888"> / '+MAX+'</span></div>'
+    +'<div><span style="font-size:12px;color:#888">ශ්‍රේණිය: </span><span style="font-size:16px;font-weight:800" id="rtG">--</span></div>'
+    +'</div>';
+  h+='<div style="display:flex;gap:10px;flex-wrap:wrap">'
+    +'<button style="background:#1b5e20;color:#fff;border:none;border-radius:8px;padding:9px 22px;cursor:pointer;font-size:14px;font-weight:700" onclick="saveMark()">💾 සුරකින්න</button>'
+    +'<button style="background:rgba(255,255,255,0.08);color:#ccc;border:none;border-radius:8px;padding:9px 14px;cursor:pointer;font-size:13px" onclick="cancelMark()">✗ අවලංගු</button>'
+    +'</div></div>';
+  return h;
+}
+function updMark(no,max,val){
+  const v=Math.max(0,Math.min(max,Number(val)||0));
+  markingData[no]=v;
+  const p=document.getElementById('mpct_'+no);if(p)p.textContent=Math.round(v/max*100)+'%';
+  const s=subs.find(x=>x.id===markingId);if(!s)return;
+  const mcqTot=[1,2,3,4].reduce((t,n)=>t+(Number(s.examinerMarks[n])||0),0);
+  const wTot=[5,6,7,8,9,10].reduce((t,n)=>t+(Number(markingData[n])||0),0);
+  const tot=mcqTot+wTot;const pct=Math.round(tot/MAX*100);const gr=gradeInfo(pct);
+  const rW=document.getElementById('rtW');const rT=document.getElementById('rtT');const rG=document.getElementById('rtG');
+  if(rW)rW.textContent=wTot;if(rT)rT.textContent=tot;
+  if(rG){rG.textContent=gr.g+' ('+pct+'%)';rG.style.color=gr.c;}
+}
+function saveMark(){
+  const s=subs.find(x=>x.id===markingId);if(!s)return;
+  Object.assign(s.examinerMarks,markingData);
+  s.markedAt=new Date().toLocaleString('si-LK');
+  const _ms=subs.find(x=>x.id===markingId); saveSubs(); if(_ms) pushToCloud(_ms);
+  markingId=null;markingData={};renderSheet();
+}
+function cancelMark(){markingId=null;markingData={};renderSheet();}
+
+function startEdit(id){
+  const s=subs.find(x=>x.id===id);if(!s)return;
+  editId=id;editAns=Object.assign({},s.answers);expandedId=id;markingId=null;renderSheet();
+}
+function buildEditBar(){
+  return '<div style="background:#2e7d3215;border:1px solid #2e7d3244;border-radius:8px;padding:10px 14px;margin-bottom:12px;display:flex;gap:10px;align-items:center;flex-wrap:wrap">'
+        +'<span style="font-size:13px;color:#a5d6a7;font-weight:600">📝  පිළිතුරු සංශෝධනය කරමින්…</span>'
+        +'<button style="background:#1b5e20;color:#fff;border:none;border-radius:6px;padding:6px 16px;cursor:pointer;font-size:12px;font-weight:600" onclick="saveEdit()">💾 සුරකින්න</button>'
+        +'<button style="background:rgba(255,255,255,0.08);color:#ccc;border:none;border-radius:6px;padding:6px 14px;cursor:pointer;font-size:12px" onclick="cancelEdit()">✗ අවලංගු</button>'
+        +'</div>';
+}
+function saveEdit(){
+  const s=subs.find(x=>x.id===editId);if(!s)return;
+  s.answers=Object.assign({},editAns);s.editedAt=new Date().toLocaleString('si-LK');
+  UNIT.questions.filter(q=>q.type==='MCQ').forEach(q=>{
+    s.examinerMarks[q.no]=(LABELS.indexOf(s.answers[q.no]||'')===ANSWER_KEY[q.no]?q.marks:0);
+  });
+  const _es=subs.find(x=>x.id===editId); saveSubs(); if(_es) pushToCloud(_es);
+  editId=null;editAns={};renderSheet();
+}
+function cancelEdit(){editId=null;editAns={};renderSheet();}
+
+function buildAnsGrid(s){
+  let h='<div class="ans-grid">';
+  UNIT.questions.forEach(q=>{
+    const isEdit=editId===s.id;
+    const cur=(isEdit?editAns:s.answers)[q.no];
+    const qc=q.type==='MCQ'?'#1565c0':q.type==='Short'?'#2e7d32':'#7b1fa2';
+    const em=s.examinerMarks[q.no];
+    const isRight=q.type==='MCQ'&&cur&&LABELS.indexOf(cur)===ANSWER_KEY[q.no];
+    h+='<div class="ans-card" style="border-color:'+qc+'33">'
+      +'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:3px">'
+      +'<span style="font-size:12px;font-weight:700;color:'+qc+'">ප්‍ර '+q.no+' · '+q.type+' · '+q.marks+'ල.</span>'
+      +(em!=null?'<span style="font-size:13px;font-weight:800;color:#ffa726">'+em+'/'+q.marks+'</span>':'')
+      +'</div>'
+      +'<div style="font-size:11px;color:#777;margin-bottom:7px;line-height:1.4">'+escH(q.text.split('\n')[0].slice(0,60))+'</div>';
+    if(isEdit&&q.type==='MCQ'){
+      h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:5px">';
+      q.opts.forEach((op,i)=>{const l=LABELS[i];const sel=editAns[q.no]===l;
+        h+='<button onclick="editAns['+q.no+']=\''+l+'\';renderSheet()" style="background:'+(sel?qc:'rgba(255,255,255,0.05)')+';border:'+(sel?'2px solid '+qc:'1px solid rgba(255,255,255,0.12)')+';border-radius:6px;padding:6px 9px;color:'+(sel?'#fff':'#aaa')+';font-size:12px;cursor:pointer;text-align:left"><b>'+l+'.</b> '+escH(op)+'</button>';
+      });h+='</div>';
+    }else if(isEdit){
+      h+='<textarea class="ta" style="margin-top:0" rows="'+(q.type==='Struct'?7:4)+'" oninput="editAns['+q.no+']=this.value">'+escH(editAns[q.no]||'')+'</textarea>';
+    }else if(q.type==='MCQ'){
+      h+='<div class="ans-val">'+(cur||'--')+(em!=null?' · '+(isRight?'✅ නිවැරදි':'❌ '+LABELS[ANSWER_KEY[q.no]]+' නිවැරදි'):'')+'</div>';
+    }else{
+      h+='<div class="ans-val">'+(cur?escH(cur):'<span style="color:#555">-- හිස් --</span>')+'</div>';
+    }
+    h+='</div>';
+  });
+  return h+'</div>';
+}
+
+function delSub(id){if(!confirm('මෙම ඇතුළත් කිරීම මකන්නද?'))return;
+  const _d=subs.find(s=>s.id===id); subs=subs.filter(s=>s.id!==id); saveSubs();
+  if(_d&&_d.cloudId) deleteFromCloud(_d.cloudId);
+  if(expandedId===id)expandedId=null;updateSubsHint();renderSheet();}
+function clearAll(){if(!confirm('සියලු ශිෂ්‍ය data මකන්නද? මෙය 되돌릴 නොහැක!'))return;subs=[];saveSubs();expandedId=null;updateSubsHint();renderSheet();}
+
+/* ===================================================
+   PRINT RESULT SHEET  --  Professional A4 Certificate
+   =================================================== */
+function doPrint(id){
+  const s=subs.find(x=>x.id===id);if(!s)return;
+  const tot=totalMarks(s);
+  const pct=Math.round(tot/MAX*100);
+  const gr=gradeInfo(pct);
+  const C='#6A1B9A';
+  const mcqTot=[1,2,3,4].reduce((t,n)=>t+(Number(s.examinerMarks[n])||0),0);
+  const bTot=[5,6,7].reduce((t,n)=>t+(Number(s.examinerMarks[n])||0),0);
+  const cTot=[8,9,10].reduce((t,n)=>t+(Number(s.examinerMarks[n])||0),0);
+
+  /* MCQ rows */
+  const mcqRows=[1,2,3,4].map(n=>{
+    const q=UNIT.questions.find(x=>x.no===n);
+    const v=s.answers[n]||'--';
+    const correct=LABELS[ANSWER_KEY[n]];
+    const isRight=v===correct;
+    const m=s.examinerMarks[n]!=null?s.examinerMarks[n]:'--';
+    return '<tr>'
+      +'<td style="text-align:center;font-weight:700;color:'+C+';width:28px">'+n+'</td>'
+      +'<td style="text-align:center;background:#e3f2fd;width:32px"><span style="background:#1565c022;color:#1565c0;border-radius:4px;padding:2px 7px;font-size:11px;font-weight:700">A</span></td>'
+      +'<td style="font-size:11px;color:#555;max-width:200px">'+escH(q.text.split('\n')[0].slice(0,70))+'</td>'
+      +'<td style="text-align:center;font-weight:600;width:40px">'+q.marks+'</td>'
+      +'<td style="text-align:center;font-weight:800;font-size:13px;color:'+(isRight?'#2e7d32':'#c62828')+';width:38px">'+v+'</td>'
+      +'<td style="text-align:center;font-size:12px;color:#888;width:38px">'+correct+'</td>'
+      +'<td style="text-align:center;font-size:13px;width:28px">'+(isRight?'✅':'❌')+'</td>'
+      +'<td style="text-align:center;font-weight:800;font-size:14px;color:'+(m!='--'&&m>0?'#2e7d32':m!='--'?'#c62828':'#999')+';width:40px">'+m+'</td>'
+      +'</tr>';
+  }).join('');
+
+  /* Written rows */
+  const writRows=[5,6,7,8,9,10].map(n=>{
+    const q=UNIT.questions.find(x=>x.no===n);
+    const sec=q.type==='Short'?'B':'C';
+    const secC=q.type==='Short'?'#2e7d32':'#7b1fa2';
+    const secBg=q.type==='Short'?'#e8f5e9':'#f3e5f5';
+    const m=s.examinerMarks[n]!=null?s.examinerMarks[n]:'--';
+    const hasAns=s.answers[n]?.toString().trim();
+    return '<tr>'
+      +'<td style="text-align:center;font-weight:700;color:'+C+';width:28px">'+n+'</td>'
+      +'<td style="text-align:center;background:'+secBg+';width:32px"><span style="background:'+secC+'22;color:'+secC+';border-radius:4px;padding:2px 7px;font-size:11px;font-weight:700">'+sec+'</span></td>'
+      +'<td style="font-size:11px;color:#555;max-width:200px">'+escH(q.text.split('\n')[0].slice(0,70))+'</td>'
+      +'<td style="text-align:center;font-weight:600;width:40px">'+q.marks+'</td>'
+      +'<td style="text-align:center;font-size:12px;color:#888;width:38px">'+(hasAns?'✓ ලිවීය':'--')+'</td>'
+      +'<td colspan="2" style="text-align:center;font-size:11px;color:#aaa;width:66px">ලිඛිත</td>'
+      +'<td style="text-align:center;font-weight:800;font-size:14px;color:'+(m!='--'&&m>0?'#2e7d32':m!='--'?'#999':'#bbb')+';width:40px">'+m+'</td>'
+      +'</tr>';
+  }).join('');
+
+  /* Section subtotal rows */
+  const subRows=[
+    ['A','#1565c0','#e3f2fd',[1,2,3,4],20,mcqTot],
+    ['B','#2e7d32','#e8f5e9',[5,6,7],30,bTot],
+    ['C','#7b1fa2','#f3e5f5',[8,9,10],50,cTot],
+  ].map(([sec,cc,bg,nos,max,earned])=>{
+    return '<tr style="background:'+bg+'">'
+      +'<td colspan="7" style="font-weight:700;color:'+cc+';font-size:12px;padding:7px 10px">'
+      +(sec==='A'?'A කොටස -- බහු විකල්ප (ස්වයංක්‍රීය)':sec==='B'?'B කොටස -- කෙටි පිළිතුරු':'C කොටස -- ව්‍යුහගත ප්‍රශ්න')
+      +' &nbsp; <span style="font-size:11px;font-weight:400;color:#888">උප එකතුව</span>'
+      +'</td>'
+      +'<td style="text-align:center;font-weight:900;font-size:16px;color:'+cc+';background:'+bg+'">'+earned+' <span style="font-size:11px;font-weight:400;color:#888">/ '+max+'</span></td>'
+      +'</tr>';
+  }).join('');
+
+  /* Grade color logic */
+  const grColor=gr.bc==='#f9a825'?'#b8860b':gr.c;
+
+  const html=
+    /* -- Header band -- */
+    '<div class="pt-header-band">'
+    +'<div><div class="pt-inst-name">ශ්‍රී ලංකා තාක්ෂණ විද්‍යාලය -- මරදාන</div>'
+    +'<div class="pt-inst-sub">ශ්‍රී ලංකා තාක්ෂণ විද්‍යාලය -- මරදාන</div>'
+    +'<div class="pt-inst-craft">ශිල්ප අදියර · ශිල්ප අදියර · විදුලි තාක්ෂණය · විද්‍යාව 2026</div></div>'
+    +'<div class="pt-unit-badge"><div class="pt-unit-no">4</div><div class="pt-unit-code">021.04.01</div></div>'
+    +'</div>'
+
+    /* -- Unit title -- */
+    +'<div class="pt-unit-bar">'
+    +'<div class="pt-unit-title">සමතලා බල</div>'
+    +'<div class="pt-unit-en">Coplanar Forces &nbsp;·&nbsp; 2026 මැයි 22 &nbsp;·&nbsp; කාලය: පැය 01 &nbsp;·&nbsp; මුළු ලකුණු: 100</div>'
+    +'</div>'
+
+    /* -- Student details -- */
+    +'<div class="pt-stu-section">'
+    +'<div class="pt-stu-label">ශිෂ්‍ය තොරතුරු</div>'
+    +'<div class="pt-stu-grid">'
+    +'<div class="pt-stu-cell accent"><span class="pt-stu-cell-lbl">ශිෂ්‍ය නම</span><span class="pt-stu-cell-val">'+escH(s.studentName)+'</span></div>'
+    +'<div class="pt-stu-cell"><span class="pt-stu-cell-lbl">ශිෂ්‍ය ලේඛන අංකය</span><span class="pt-stu-cell-val" style="color:#6A1B9A;font-size:18px">'+escH(s.studentId)+'</span></div>'
+    +'<div class="pt-stu-cell accent"><span class="pt-stu-cell-lbl">වාරය</span><span class="pt-stu-cell-val">'+escH(s.studentBatch||'--')+'</span></div>'
+    +'<div class="pt-stu-cell"><span class="pt-stu-cell-lbl">ඉදිරිපත් කළ දිනය</span><span class="pt-stu-cell-val" style="font-size:12px">'+escH(s.submittedAt)+'</span></div>'
+    +'</div></div>'
+
+    /* -- Marks table -- */
+    +'<div class="pt-marks-section">'
+    +'<div class="pt-section-label">ලකුණු විශ්ලේෂණය</div>'
+    +'<table class="pt-marks-table">'
+    +'<thead><tr>'
+    +'<th style="width:28px">ප්‍ර #</th><th style="width:32px">කොටස</th><th>ප්‍රශ්නය</th>'
+    +'<th style="width:40px">උපරිම</th><th style="width:38px">ශිෂ්‍ය</th><th style="width:38px">නිවැරදි</th>'
+    +'<th style="width:28px">✓✗</th><th style="width:40px">ලද ල.</th>'
+    +'</tr></thead>'
+    +'<tbody>'+mcqRows+writRows+subRows+'</tbody>'
+    +'</table></div>'
+
+    /* -- Result cards -- */
+    +'<div class="pt-result-section">'
+    +'<div class="pt-section-label">ප්‍රතිඵලය / Result</div>'
+    +'<div class="pt-result-cards">'
+    /* Total card */
+    +'<div class="pt-result-card" style="background:#6A1B9A10;border:2px solid #6A1B9A44">'
+    +'<div class="pt-result-card-lbl">මුළු ලකුණු</div>'
+    +'<div class="pt-result-card-val" style="color:#6A1B9A">'+tot+'</div>'
+    +'<div class="pt-result-card-sub" style="color:#888">/ '+MAX+'</div>'
+    +'</div>'
+    /* Percentage card */
+    +'<div class="pt-result-card" style="background:'+grColor+'18;border:2px solid '+grColor+'55">'
+    +'<div class="pt-result-card-lbl">ප්‍රතිශතය</div>'
+    +'<div class="pt-result-card-val" style="color:'+grColor+'">'+pct+'%</div>'
+    +'<div class="pt-result-card-sub" style="color:'+grColor+'">'+gr.g+'</div>'
+    +'</div>'
+    /* Section breakdown card */
+    +'<div class="pt-result-card" style="background:#f8f9fa;border:2px solid #e0e0e0;text-align:left;padding:12px 14px">'
+    +'<div class="pt-result-card-lbl" style="text-align:left">කොටස් ලකුණු</div>'
+    +'<div style="display:flex;flex-direction:column;gap:5px;margin-top:4px">'
+    +'<div style="display:flex;justify-content:space-between;font-size:12px"><span style="color:#1565c0;font-weight:700">A -- MCQ (ස්වයං)</span><span style="font-weight:800">'+mcqTot+' / 20</span></div>'
+    +'<div style="display:flex;justify-content:space-between;font-size:12px"><span style="color:#2e7d32;font-weight:700">B -- කෙටි</span><span style="font-weight:800">'+bTot+' / 30</span></div>'
+    +'<div style="display:flex;justify-content:space-between;font-size:12px"><span style="color:#7b1fa2;font-weight:700">C -- ව්‍යු.</span><span style="font-weight:800">'+cTot+' / 50</span></div>'
+    +'</div></div>'
+    +'</div>'
+
+    /* MCQ visual analysis */
+    +'<div class="pt-section-label" style="margin-bottom:8px">MCQ පිළිතුරු / MCQ Answers</div>'
+    +'<div class="pt-mcq-row">'
+    +[1,2,3,4].map(n=>{
+      const v=s.answers[n]||'--';
+      const correct=LABELS[ANSWER_KEY[n]];
+      const isRight=v===correct;
+      const m=s.examinerMarks[n];
+      return '<div class="pt-mcq-card" style="border-color:'+(isRight?'#2e7d3266':'#ef535055')+';background:'+(isRight?'#e8f5e9':'#ffebee')+';">'
+        +'<div class="pt-mcq-qno">ප්‍ර '+n+'</div>'
+        +'<div class="pt-mcq-ans" style="color:'+(isRight?'#2e7d32':'#c62828')+'">'+v+'</div>'
+        +'<div class="pt-mcq-correct">නිවැරදි: '+correct+'</div>'
+        +'<div class="pt-mcq-verdict" style="color:'+(isRight?'#2e7d32':'#c62828')+'">'+(isRight?'✅ +'+m:'❌ 0')+'</div>'
+        +'</div>';
+    }).join('')
+    +'</div>'
+
+    /* Grade scale */
+    +'<div class="pt-scale">'
+    +'<div style="font-size:11px;font-weight:600;color:#777">ශ්‍රේණිදායක පරිමාණය</div>'
+    +'<div class="pt-scale-items">'
+    +[['විශේෂ','80–100%','#b8860b'],['ගෞරව','65–79%','#607d8b'],['සමත්','50–64%','#795548'],['අසමත්','< 50%','#c62828']].map(([g,r,c])=>
+      '<div style="display:flex;gap:6px;align-items:center">'
+      +'<div style="width:11px;height:11px;border-radius:50%;background:'+c+'"></div>'
+      +'<b style="font-size:12px;color:'+c+'">'+g+'</b>'
+      +'<span style="font-size:11px;color:#999">'+r+'</span>'
+      +(gr.g===g?'<span style="font-size:12px">◀ ශිෂ්‍ය</span>':'')
+      +'</div>'
+    ).join('')
+    +'</div></div>'
+    +'</div>' // pt-result-section
+
+    /* -- Signatures -- */
+    +'<div class="pt-sig-section">'
+    +['ශිෂ්‍ය අත්සන','ගුරු / නිරීක්ෂකගේ අත්සන','විදුහල්පතිගේ අත්සන'].map(l=>
+      '<div class="pt-sig"><div class="pt-sig-line"></div><div class="pt-sig-label">'+l+'</div><div class="pt-sig-date">දිනය: ………………</div></div>'
+    ).join('')
+    +'</div>'
+
+    /* -- Footer -- */
+    +'<div class="pt-footer-band">'
+    +'<div class="pt-footer-l">ශ්‍රී ලංකා තාක්ෂණ විද්‍යාලය -- මරදාන &nbsp;·&nbsp; ශිල්ප අදියර · විද්‍යාව 2026</div>'
+    +'<div class="pt-footer-r">සකස් කළ: '+escH(new Date().toLocaleString('si-LK'))+'</div>'
+    +'</div>';
+
+  document.getElementById('printPage').innerHTML=html;
+  document.getElementById('sPrint').style.display='block';
+  document.querySelectorAll('.scr').forEach(s=>s.classList.remove('on'));
+  window.scrollTo(0,0);
+}
+function hidePrint(){document.getElementById('sPrint').style.display='none';showScr('sSheet');}
+
+
+/* === ADMIN / TEACHER LOGIN === */
+const ADMIN_PASS = 'sltc2026';
+
+function doLogin(){
+  const pw = document.getElementById('pwInput').value;
+  const err = document.getElementById('pwErr');
+  if(pw === ADMIN_PASS){
+    document.getElementById('pwInput').value = '';
+    err.textContent = '';
+    showScr('sTeacher');
+  } else {
+    err.textContent = '❌ Password වැරදිය! නැවත උත්සාහ කරන්න.';
+    document.getElementById('pwInput').select();
+  }
+}
+
+
+/* -- ANSWER KEY EDITOR -- */
+function openKeyEditor(){
+  const labels=['A','B','C','D'];
+  const cur=[1,2,3,4].map(n=>'P'+n+':'+labels[ANSWER_KEY[n]]).join('  ');
+  const input=prompt('MCQ Answer Key - P1 to P4 (A=0 B=1 C=2 D=3)' + ' | ' + cur, JSON.stringify(ANSWER_KEY));
+  if(!input) return;
+  try{
+    const parsed=JSON.parse(input);
+    let valid=true;
+    [1,2,3,4].forEach(n=>{if(parsed[n]===undefined||parsed[n]<0||parsed[n]>3)valid=false;});
+    if(!valid){alert('Format error: use 0-3 values');return;}
+    Object.assign(ANSWER_KEY,parsed);
+    subs.forEach(s=>{
+      [1,2,3,4].forEach(n=>{
+        const q=UNIT.questions.find(x=>x.no===n);
+        const chosen=['A','B','C','D'].indexOf(s.answers[n]||'');
+        s.examinerMarks[n]=(chosen===ANSWER_KEY[n]?q.marks:0);
+      });
+    });
+    saveSubs();
+    alert('Answer Key updated: ' + [1,2,3,4].map(n=>'P'+n+':'+labels[ANSWER_KEY[n]]).join('  '));
+    renderSheet();
+  }catch(e){alert('JSON error: '+e.message);}
+}
+
+/* =======================================
+   QUESTION EDITOR
+   ======================================= */
+const ORIG_QUESTIONS = JSON.parse(JSON.stringify(UNIT.questions));
+const ORIG_KEY = Object.assign({}, ANSWER_KEY);
+const ED_SK = SK + '_ed';
+let edUnit = null;
+let edActiveTab = 0;
+
+function edLoad(){
+  try{
+    const raw = localStorage.getItem(ED_SK);
+    if(raw){
+      const saved = JSON.parse(raw);
+      saved.forEach(q=>{
+        const idx = UNIT.questions.findIndex(x=>x.no===q.no);
+        if(idx>=0){
+          UNIT.questions[idx] = q;
+          if(q.type==='MCQ') ANSWER_KEY[q.no] = q.answerIdx ?? ANSWER_KEY[q.no];
+        }
+      });
+    }
+  }catch(e){}
+}
+
+function edSave(){
+  if(!edUnit) return;
+  edUnit.questions.forEach(q=>{
+    const idx = UNIT.questions.findIndex(x=>x.no===q.no);
+    if(idx>=0){
+      UNIT.questions[idx] = JSON.parse(JSON.stringify(q));
+      if(q.type==='MCQ') ANSWER_KEY[q.no] = (q.answerIdx != null ? q.answerIdx : ANSWER_KEY[q.no]);
+    }
+  });
+  localStorage.setItem(ED_SK, JSON.stringify(UNIT.questions));
+  document.getElementById('edNotice').textContent = '✅ සුරකිණා! ප්‍රශ්නය ආරම්භ කළ විට නව ප්‍රශ්න දිස්වේ.';
+}
+
+function edReset(){
+  if(!confirm('සියලු සංශෝධන ඉවත් කර මුල් ප්‍රශ්නවලට ආපසු යන්නද?')) return;
+  localStorage.removeItem(ED_SK);
+  ORIG_QUESTIONS.forEach(q=>{
+    const idx = UNIT.questions.findIndex(x=>x.no===q.no);
+    if(idx>=0) UNIT.questions[idx] = JSON.parse(JSON.stringify(q));
+  });
+  Object.assign(ANSWER_KEY, ORIG_KEY);
+  edUnit = JSON.parse(JSON.stringify(UNIT));
+  document.getElementById('edNotice').textContent = '↺ මුල් ප්‍රශ්නවලට නැවත සකසා ගන්නා ලදී';
+  renderEditor();
+}
+
+function renderEdTabs(){
+  const tabs=[
+    {label:'A -- MCQ (ප්‍ර 1–4)'},
+    {label:'B -- කෙටි (ප්‍ර 5–7)'},
+    {label:'C -- ව්‍යු. (ප්‍ර 8–10)'},
+  ];
+  document.getElementById('edTabs').innerHTML = tabs.map((t,i)=>
+    '<button class="ed-tab'+(edActiveTab===i?' active':'')+'" onclick="edActiveTab='+i+';renderEditor()">'+t.label+'</button>'
+  ).join('');
+}
+
+function renderEditor(){
+  if(!edUnit) edUnit = JSON.parse(JSON.stringify(UNIT));
+  renderEdTabs();
+  const grpColors=['#1565c0','#2e7d32','#7b1fa2'];
+  const grpQs=[[1,2,3,4],[5,6,7],[8,9,10]];
+  const gc=grpColors[edActiveTab];
+  let html='';
+  grpQs[edActiveTab].forEach(no=>{
+    const q=edUnit.questions.find(x=>x.no===no);
+    if(!q) return;
+    const isMCQ=q.type==='MCQ';
+    const ansIdx=(q.answerIdx!=null?q.answerIdx:(ANSWER_KEY[no]??0));
+    html+='<div class="ed-qcard">'
+        +'<div class="ed-qcard-hdr">'
+        +'<div class="ed-qbadge" style="background:'+gc+'">ප්‍ර '+no+'</div>'
+        +'<span style="font-size:13px;color:#90caf9;font-weight:600">'+(isMCQ?'MCQ':q.type==='Short'?'කෙටි පිළිතුරු':'ව්‍යුහගත')+'</span>'
+        +'<div style="display:flex;align-items:center;gap:6px;margin-left:auto">'
+        +'<span style="font-size:12px;color:#888">ලකුණු:</span>'
+        +'<input type="number" min="1" max="50" value="'+q.marks+'" class="ed-marks-inp" '
+        +'oninput="edUnit.questions.find(x=>x.no==='+no+').marks=Math.max(1,Number(this.value));edDirty()">'
+        +'</div></div>';
+    html+='<label class="ed-field-lbl">ප්‍රශ්නය</label>';
+    html+='<textarea class="ed-ta" rows="'+(isMCQ?3:6)+'" '
+        +'oninput="edUnit.questions.find(x=>x.no==='+no+').text=this.value;edDirty()">'
+        +escH(q.text)+'</textarea>';
+    if(isMCQ){
+      html+='<label class="ed-field-lbl">MCQ විකල්ප &nbsp;--&nbsp; ✓ button click = නිවැරදි පිළිතුර</label>';
+      html+='<div class="ed-opts">';
+      ['A','B','C','D'].forEach((ltr,i)=>{
+        const isCor=ansIdx===i;
+        html+='<div class="ed-opt-row">'
+            +'<span class="ed-opt-ltr" style="color:'+gc+'">'+ltr+'.</span>'
+            +'<input class="ed-inp" style="flex:1" value="'+escH(q.opts?.[i]||'')+'" '
+            +'oninput="(edUnit.questions.find(x=>x.no==='+no+').opts=edUnit.questions.find(x=>x.no==='+no+').opts||[])['+i+']=this.value;edDirty()">'
+            +'<button class="ed-key-btn'+(isCor?' correct':'')+'" onclick="edSetKey('+no+','+i+')" id="ekb_'+no+'_'+i+'">'+(isCor?'✓':'○')+'</button>'
+            +'</div>';
+      });
+      html+='</div>';
+      html+='<div style="font-size:11px;color:'+gc+';background:'+gc+'15;border-radius:6px;padding:6px 10px;margin-top:8px">'
+          +'💡 ✓ = නිවැරදි පිළිතුර · Submit කිරීමේදී MCQ ලකුණු ස්වයංක්‍රීයව ගිනේ'
+          +'</div>';
+    }else{
+      html+='<div style="font-size:11px;color:#888;background:rgba(255,255,255,0.04);border-radius:6px;padding:6px 10px;margin-top:8px">'
+          +'💡 ලිඛිත ප්‍රශ්නවලට ගුරු තුමා Sheet හි ✏️ ල. button මගින් ලකුණු ලිවිය යුතුය'
+          +'</div>';
+    }
+    html+='</div>';
+  });
+  document.getElementById('edBody').innerHTML=html;
+}
+
+function edSetKey(no,idx){
+  const q=edUnit.questions.find(x=>x.no===no);
+  if(!q) return;
+  q.answerIdx=idx;
+  edDirty();
+  ['A','B','C','D'].forEach((_,i)=>{
+    const b=document.getElementById('ekb_'+no+'_'+i);
+    if(b){b.className='ed-key-btn'+(i===idx?' correct':'');b.textContent=i===idx?'✓':'○';}
+  });
+}
+
+function edDirty(){
+  document.getElementById('edNotice').textContent='⚠️ නොසුරකි -- 💾 Save click කරන්න';
+}
+
+// Patch showScr to init editor on nav
+const _origShowScr = showScr;
+showScr = function(id){
+  _origShowScr(id);
+  if(id==='sEditor'){
+    edUnit=JSON.parse(JSON.stringify(UNIT));
+    edActiveTab=0;
+    document.getElementById('edNotice').textContent='ප්‍රශ්නයක් edit කර 💾 Save click කරන්න';
+    renderEditor();
+  }
+};
+
+function refreshCloud(){
+  setSyncStatus(null,'Refreshing...');
+  loadSubs().then(()=>{updateSubsHint();renderSheet();});
+}
+
+/* -- INIT -- */
+edLoad();
+loadSubs().then(()=>{updateSubsHint();renderSheet();});
+</script>
+
+<!-- EDITOR -->
+<div id="sEditor" class="scr">
+  <div class="ed-hdr">
+    <div>
+      <div style="font-size:18px;font-weight:700;color:#fff">⚙️ ප්‍රශ්න සංස්කරණය</div>
+      <div style="font-size:12px;color:#777;margin-top:3px">ප්‍රශ්නය · MCQ options · නිවැරදි පිළිතුර · ලකුණු -- සංශෝධනය කර 💾 Save click කරන්න</div>
+    </div>
+    <button class="btn-ghost" onclick="showScr('sTeacher')">← ගුරු panel</button>
+  </div>
+  <div class="ed-tabs" id="edTabs"></div>
+  <div id="edBody"></div>
+  <div class="ed-save-bar">
+    <div style="font-size:12px;color:#aaa;flex:1" id="edNotice">ප්‍රශ්නයක් edit කර 💾 Save click කරන්න</div>
+    <button class="btn-ed-reset" onclick="edReset()">↺ මුල් ප්‍රශ්නවලට</button>
+    <button class="btn-ed-save" onclick="edSave()">💾 සුරකින්න</button>
+  </div>
+</div>
+
+</body>
+</html>
