@@ -336,7 +336,6 @@ button,input,textarea,select{font-family:inherit}
       <h2 style="color:#a5d6a7;font-size:21px;margin:0 0 8px">ඉදිරිපත් කළා!</h2>
       <div style="color:#e0e0e0;font-weight:600;font-size:16px;margin:6px 0 2px" id="okName"></div>
       <div style="color:#888;font-size:13px" id="okId"></div>
-      <div style="font-size:13px;margin-top:12px;min-height:20px" id="okCloudStatus">⏳ Cloud හි save කරමින්...</div>
       <div style="display:flex;gap:10px;justify-content:center;margin-top:24px">
         <button class="btn-start" style="padding:11px 24px;width:auto" onclick="resetගෙදර()">🏠 ගෙදර</button>
       </div>
@@ -584,23 +583,10 @@ function doSubmit(){
     sub.examinerMarks[q.no]=(chosen===correct?q.marks:0);
   });
   subs.push(sub);saveSubs();updateSubsHint();
+  pushToCloud(sub).then(ok=>{ if(ok) setSyncStatus(true,'☁️ Cloud හි save විණි'); });
   document.getElementById('okName').textContent=student.name;
   document.getElementById('okId').textContent=student.id+' · ඒකකය 1';
   showScr('sOk');
-  const okStatus = document.getElementById('okCloudStatus');
-  if(okStatus) okStatus.style.color='#ffa726';
-  pushToCloud(sub).then(ok=>{
-    if(okStatus){
-      if(ok){
-        okStatus.textContent='☁️ Cloud හි save විණි ✓';
-        okStatus.style.color='#66bb6a';
-      } else {
-        okStatus.textContent='📵 Cloud save අසාර්ථකයි — local OK';
-        okStatus.style.color='#ef5350';
-      }
-    }
-    setSyncStatus(ok, ok?'Cloud saved':'Sync failed');
-  });
 }
 function resetගෙදර(){
   student={name:'',id:'',batch:''};answers={};
@@ -1022,33 +1008,20 @@ const ED_SK = SK + '_ed';
 let edUnit = null;
 let edActiveTab = 0;
 
-function applyQuestions(saved){
-  saved.forEach(q=>{
-    const idx = UNIT.questions.findIndex(x=>x.no===q.no);
-    if(idx>=0){
-      UNIT.questions[idx] = q;
-      if(q.type==='MCQ') ANSWER_KEY[q.no] = q.answerIdx ?? ANSWER_KEY[q.no];
-    }
-  });
-}
-
 function edLoad(){
-  // Load from localStorage first (instant)
   try{
     const raw = localStorage.getItem(ED_SK);
-    if(raw) applyQuestions(JSON.parse(raw));
-  }catch(e){}
-  // Then sync from Supabase
-  sbFetch('questions?unit_no=eq.1&order=q_no.asc').then(async r=>{
-    if(r && r.ok){
-      const rows = await r.json();
-      if(rows && rows.length>0){
-        const saved = rows.map(r=>JSON.parse(r.q_data));
-        applyQuestions(saved);
-        localStorage.setItem(ED_SK, JSON.stringify(saved));
-      }
+    if(raw){
+      const saved = JSON.parse(raw);
+      saved.forEach(q=>{
+        const idx = UNIT.questions.findIndex(x=>x.no===q.no);
+        if(idx>=0){
+          UNIT.questions[idx] = q;
+          if(q.type==='MCQ') ANSWER_KEY[q.no] = q.answerIdx ?? ANSWER_KEY[q.no];
+        }
+      });
     }
-  }).catch(e=>{});
+  }catch(e){}
 }
 
 function edSave(){
@@ -1061,26 +1034,7 @@ function edSave(){
     }
   });
   localStorage.setItem(ED_SK, JSON.stringify(UNIT.questions));
-  document.getElementById('edNotice').textContent = '💾 Cloud හි සුරකිමින්...';
-  // Push each question to Supabase
-  const saves = UNIT.questions.map(async q=>{
-    const payload = {unit_no: 1, q_no: q.no, q_data: JSON.stringify(q)};
-    // Try upsert
-    const r = await sbFetch('questions?unit_no=eq.1&q_no=eq.'+q.no, {method:'GET'});
-    if(r.ok){
-      const existing = await r.json();
-      if(existing && existing.length>0){
-        await sbFetch('questions?unit_no=eq.1&q_no=eq.'+q.no, {method:'PATCH', body:JSON.stringify(payload)});
-      } else {
-        await sbFetch('questions', {method:'POST', body:JSON.stringify(payload)});
-      }
-    }
-  });
-  Promise.all(saves).then(()=>{
-    document.getElementById('edNotice').textContent = '✅ Cloud හි සුරකිණා! සියලු දුරකථනවල නව ප්‍රශ්න දිස්වේ.';
-  }).catch(()=>{
-    document.getElementById('edNotice').textContent = '✅ දේශීයව සුරකිණා (Cloud sync අසාර්ථකයි)';
-  });
+  document.getElementById('edNotice').textContent = '✅ සුරකිණා! ප්‍රශ්නය ආරම්භ කළ විට නව ප්‍රශ්න දිස්වේ.';
 }
 
 function edReset(){
